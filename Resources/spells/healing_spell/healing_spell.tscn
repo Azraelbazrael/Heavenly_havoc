@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://y0mmwv64rcby"]
+
+[ext_resource type="Script" uid="uid://bm4knak7121x7" path="res://Resources/spells/healing_spell/healing_spell.gd" id="1_x4yii"]
+
+[node name="healing_spell" type="Node2D" groups=["MagicSpells"]]
+script = ExtResource("1_x4yii")
+spell_name = "Healing Spell"
+min_roll = 10
+max_roll = 50
+mana_cost = 20

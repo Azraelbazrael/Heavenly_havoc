@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BattlerStats" load_steps=2 format=3 uid="uid://cg57dcaqs0tt2"]
+
+[ext_resource type="Script" uid="uid://clh6od4i0ebdw" path="res://Resources/battler_stats.gd" id="1_6jn46"]
+
+[resource]
+script = ExtResource("1_6jn46")
+type = 0
+char_name = ""
+max_hp = 200
+turn_speed = 50
+attack = 60
+defense = 30
+magic = 0
+unity = 0
+intelligence = 0
+style = 0
+max_mana = 0
+defending = false
+base_lvl = 1
+experience = 11

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BattlerStats" load_steps=2 format=3 uid="uid://dh5g6simh4rd1"]
+
+[ext_resource type="Script" uid="uid://clh6od4i0ebdw" path="res://Resources/battler_stats.gd" id="1_e2y8r"]
+
+[resource]
+resource_name = "Ambrosia"
+script = ExtResource("1_e2y8r")
+type = 1
+char_name = "Ambrosia"
+max_hp = 200
+turn_speed = 50
+attack = 20
+defense = 20
+magic = 70
+unity = 20
+intelligence = 20
+style = 50
+max_mana = 800
+defending = false
+base_lvl = 1
+experience = 0

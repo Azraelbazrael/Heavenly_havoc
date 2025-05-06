@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BattlerStats" load_steps=2 format=3 uid="uid://dvii027hmwl75"]
+
+[ext_resource type="Script" uid="uid://clh6od4i0ebdw" path="res://Resources/battler_stats.gd" id="1_ns5l0"]
+
+[resource]
+resource_name = "Charon"
+script = ExtResource("1_ns5l0")
+type = 1
+char_name = "Charon"
+max_hp = 200
+turn_speed = 50
+attack = 60
+defense = 20
+magic = 30
+unity = 70
+intelligence = 0
+style = 0
+max_mana = 500
+defending = false
+base_lvl = 1
+experience = 0
