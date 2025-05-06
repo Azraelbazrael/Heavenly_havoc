@@ -19,3 +19,4 @@ max_mana = 500
 defending = false
 base_lvl = 1
 experience = 0
+spell_list = null

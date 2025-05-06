@@ -14,8 +14,8 @@ extends Node2D
 @onready var dmg_label: Label = $dmg_label
 
 
-var healing_spell = _get_spell("healing_spell")
-var angelic_whim = _get_spell("angelic_whim")
+#var healing_spell = _get_spell("healing_spell")
+#var angelic_whim = _get_spell("angelic_whim")
 
 var current_hp : int
 var current_mp: int
@@ -60,9 +60,9 @@ func start_attacking(enemy_target: Node2D) -> void:
 	enemy_target.play_hit_anim()
 	await get_tree().create_timer(0.6).timeout
 	enemy_target.take_damage(_get_attack_damage())
-	#print(_get_attack_damage())
 	await get_tree().create_timer(0.6).timeout
 	turn_ended.emit()
+
 	
 func play_attack_anim():
 	animation_player.play("Attack")
@@ -74,17 +74,16 @@ func _get_attack_damage() -> int:
 	return round( 1.5 * stats_resource.attack)
 
 	
-func _get_spell(Name):	
-	var scene = load("res://Resources/spells/" + Name + "/" + Name + ".tscn")
-	var scene_node = scene.instantiate()
-	add_child(scene_node)
+#func _get_spell(Name):	
+	#var scene = load("res://Resources/spells/" + Name + "/" + Name + ".tscn")
+	#var scene_node = scene.instantiate()
+	#add_child(scene_node)
 	
 	
-	return scene_node
+	#return scene_node
 	
 func _cast_spell():
-	healing_spell.cast(self)
-	dmg_label._update_text(healing_spell.get_spell_perform())
+	
 	_show_label()
 	turn_ended.emit()
 
@@ -104,6 +103,7 @@ func take_damage(amount: int)-> void:
 	
 	if current_hp <=0:
 		current_hp = 0
+		visible = false
 		dead.emit(self)
 		queue_free()
 	_update_progress_bar()

@@ -1,11 +1,11 @@
-extends Resource
 class_name BattlerStats
+extends Resource
+
 
 enum BattlerType{
 	Enemy, Player
 }
 
-#@export var spell_data: SpellData
 @export var type: BattlerType
 @export var char_name: String
 @export var max_hp : int
@@ -24,5 +24,6 @@ enum BattlerType{
 @export var defending: bool
 @export var base_lvl: int
 @export var experience: int
-
-#@export var spell_list: Array = [SpellBehaviour]
+#
+@export var spell_slots: Movepool
+#@export var spell_list: SpellBehaviour

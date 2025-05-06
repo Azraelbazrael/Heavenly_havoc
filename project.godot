@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/BattleScene/Battle_Scene.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://Scenes/PlayerCharacters/icon.svg"
 
+[autoload]
+
+Global="*res://Global/global.gd"
+
 [display]
 
 window/size/viewport_width=256

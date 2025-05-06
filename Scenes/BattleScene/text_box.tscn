@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://r63pjdmyfdo2"]
+[gd_scene load_steps=6 format=3 uid="uid://r63pjdmyfdo2"]
 
 [ext_resource type="Texture2D" uid="uid://evq08sjebgiv" path="res://Assets/rpg_spinoff_textbox.png" id="1_4wdp8"]
+[ext_resource type="Script" uid="uid://dxb6e6kssxc0v" path="res://Scenes/BattleScene/text_box.gd" id="1_pf2nn"]
 [ext_resource type="FontFile" uid="uid://cckje28m0o0w7" path="res://Assets/rainyhearts/rainyhearts.ttf" id="2_nqpoh"]
+[ext_resource type="Script" uid="uid://cvtqauo5ofjuq" path="res://Scenes/BattleScene/spell_options.gd" id="4_mtc80"]
+[ext_resource type="Script" uid="uid://bdldc67slbr5i" path="res://Scenes/BattleScene/spell_button.gd" id="5_qnxcp"]
 
 [node name="textbox" type="MarginContainer"]
 anchors_preset = -1
@@ -9,6 +12,7 @@ anchor_right = 0.422
 anchor_bottom = 0.302
 offset_right = -4.03201
 offset_bottom = 0.0159988
+script = ExtResource("1_pf2nn")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 texture_filter = 1
@@ -42,14 +46,27 @@ theme_override_font_sizes/normal_font_size = 9
 text = "What do you do?"
 scroll_active = false
 
-[node name="SpellOptions" type="RichTextLabel" parent="text"]
+[node name="SpellOptions" type="GridContainer" parent="text"]
+visible = false
 texture_filter = 1
 layout_mode = 2
-theme_override_colors/default_color = Color(0.960784, 0.937255, 0.807843, 1)
-theme_override_fonts/normal_font = ExtResource("2_nqpoh")
-theme_override_fonts/mono_font = ExtResource("2_nqpoh")
-theme_override_fonts/italics_font = ExtResource("2_nqpoh")
-theme_override_fonts/bold_italics_font = ExtResource("2_nqpoh")
-theme_override_fonts/bold_font = ExtResource("2_nqpoh")
-theme_override_font_sizes/normal_font_size = 9
-scroll_active = false
+columns = 2
+script = ExtResource("4_mtc80")
+
+[node name="Button" type="Button" parent="text/SpellOptions"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_qnxcp")
+
+[node name="Button2" type="Button" parent="text/SpellOptions"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_qnxcp")
+
+[node name="Button3" type="Button" parent="text/SpellOptions"]
+layout_mode = 2
+script = ExtResource("5_qnxcp")
+
+[node name="Button4" type="Button" parent="text/SpellOptions"]
+layout_mode = 2
+script = ExtResource("5_qnxcp")

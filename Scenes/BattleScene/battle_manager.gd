@@ -10,7 +10,7 @@ extends Node2D
 @onready var battle_end_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel
 @onready var textbox: MarginContainer = $CanvasLayer/textbox
 @onready var textbox_text: RichTextLabel = $CanvasLayer/textbox/text/RichTextLabel
-@onready var spell_options: RichTextLabel = $CanvasLayer/textbox/text/SpellOptions
+@onready var spell_options: GridContainer = $CanvasLayer/textbox/text/SpellOptions
 @onready var cont_button: Button = $CanvasLayer/Panel/continue_button
 @onready var exp_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel2
 
@@ -24,10 +24,11 @@ extends Node2D
 #var text_boxes = preload("res://Scenes/exp_textbox.tscn")
 var enemy_scene = preload("res://Scenes/NotMilesEdgeworth/enemy_battler.tscn")
 var all_battlers = []
+var current_spells = []
 
 @onready var wave_check: Label = $CanvasLayer/wave_check/wave_text
 
-var current_turn: Node2D
+
 var current_turn_index: int
 var current_wave = 0
 var exp_earned = 0
@@ -84,7 +85,7 @@ func _initalize() -> void:
 		e.deal_damage.connect(attack_random_player_battler) ## when an enemy is attacking (we have a dumb ai lol)
 		
 		
-	current_turn = all_battlers[current_turn_index] ## sorts all battlers on the field via turn orders
+	Global.current_turn = all_battlers[current_turn_index] ## sorts all battlers on the field via turn orders
 	_update_turn()
 	
 	
@@ -97,22 +98,23 @@ func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
 # calls the different turns
 func _update_turn() -> void:
 	#print(current_turn)
-	if current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
-		player_status_text._show_hp_text(current_turn.stats_resource.char_name, current_turn.level, current_turn.current_hp, current_turn.stats_resource.max_hp, current_turn.current_mp, current_turn.stats_resource.max_mana)
-		_show_flavor_text("What does %s do...?" %[current_turn.stats_resource.char_name])
+	if Global.current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
+		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mana)
+		_show_flavor_text("What does %s do...?" %[Global.current_turn.stats_resource.char_name])
 		turn_action_buttons.show()
 		_no_longer_defending()
 	else:
 		pass
 		#turn_action_buttons.hide()
-	current_turn.start_turn()
+	Global.current_turn.start_turn()
 		
 func _next_turn() -> void:
 	
-	current_turn.stop_turn()
+	Global.current_turn.stop_turn()
+	current_spells.clear()
 	if _check_battle_end() == false:
 		current_turn_index = (current_turn_index + 1) % all_battlers.size()
-		current_turn = all_battlers[current_turn_index]
+		Global.current_turn = all_battlers[current_turn_index]
 		
 		_update_turn()
 	#pass
@@ -128,23 +130,22 @@ func _show_target_buttons() -> void:
 
 func attack_selected_enemy(selected_enemy: Node2D) -> void:
 	_hide_target_buttons()
-	current_turn.start_attacking(selected_enemy)
-	selected_enemy.dmg_label._update_text(current_turn._get_attack_damage())
-	_show_flavor_text("%s dealt %s damage!" %[current_turn.stats_resource.char_name, current_turn._get_attack_damage()])
+	Global.current_turn.start_attacking(selected_enemy)
+	selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())
+	_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._get_attack_damage()])
 
 
 func _select_spell():
 	textbox_text.hide()
 	spell_options.show()
-	for spells in get_tree().get_nodes_in_group("MagicSpells"):
-		spell_options.append_text(spells.spell_name)
-		
-	## it'll be a forloop showing how many nodes in this specific group
-	## i'll have this function check who'se turn it is, so it'll show seperate stuff?
+	Global.emit_signal("spell_options")
+	for slots in Global.current_turn.stats_resource.spell_slots.attack_slots:
+		print(slots.spell_name)
+	
 
 func _activate_spell():
 	
-	current_turn._cast_spell()
+	Global.current_turn._cast_spell()
 	
 	_update_turn()
 	#pass
@@ -160,7 +161,7 @@ func attack_random_player_battler(damage: int) -> void:
 	_next_turn()
 
 func _defending_turn():
-	_defending(current_turn)
+	_defending(Global.current_turn)
 
 func _defending(current_player: Node2D) -> void:
 	current_player.stats_resource.defending = true
@@ -169,7 +170,7 @@ func _defending(current_player: Node2D) -> void:
 	_next_turn()
 	
 func _no_longer_defending():
-	current_turn.stats_resource.defending = false
+	Global.current_turn.stats_resource.defending = false
 	
 	
 #On death!!

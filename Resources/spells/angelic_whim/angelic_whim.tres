@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=4 format=3 uid="uid://bbke6dfy3syv4"]
+
+[ext_resource type="Script" uid="uid://ys0v6hidmvp7" path="res://Resources/spells/spell_data.gd" id="1_213co"]
+[ext_resource type="Script" uid="uid://b3bmhwe2pkdpm" path="res://Resources/spells/spell_behaviour.gd" id="2_a5dik"]
+
+[sub_resource type="Resource" id="Resource_4kf5u"]
+script = ExtResource("2_a5dik")
+type = 1
+spell_name = "Angelic Whim"
+min_roll = 12
+max_roll = 20
+mana_cost = 10
+metadata/_custom_type_script = "uid://b3bmhwe2pkdpm"
+
+[resource]
+script = ExtResource("1_213co")
+spell_name = "Angelic_whim"
+spell_behaviour = SubResource("Resource_4kf5u")
+metadata/_custom_type_script = "uid://ys0v6hidmvp7"

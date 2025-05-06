@@ -8,4 +8,3 @@ func cast(battler: Node2D):
 		battler.current_hp += get_spell_perform()
 	else:
 		print("spell failed!")
-	#print("awwwaaaggaa")

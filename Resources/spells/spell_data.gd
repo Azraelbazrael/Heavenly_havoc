@@ -1,11 +1,9 @@
-extends Node2D
+extends Resource
 class_name SpellData
 
-enum SpellType{
-	Healing, Damaging
-}
 
-@export var type: SpellType
+enum Targets{Self, Party, Enemy, All_Enemies}
+
 @export var spell_name: String
 @export var spell_behaviour: SpellBehaviour
 

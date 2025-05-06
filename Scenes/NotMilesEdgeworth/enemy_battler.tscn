@@ -177,7 +177,7 @@ text = "SELECT"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_fsa1k")
+&"": SubResource("AnimationLibrary_fsa1k")
 }
 
 [node name="Focus" type="Sprite2D" parent="."]

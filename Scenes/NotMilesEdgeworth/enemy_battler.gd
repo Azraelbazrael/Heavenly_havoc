@@ -72,6 +72,7 @@ func take_damage(amount: int)-> void:
 	
 	current_hp -= (amount - stats_resource.defense)
 	
+	print(current_hp)
 	if current_hp <=0:
 		current_hp = 0
 		dead.emit(self)
