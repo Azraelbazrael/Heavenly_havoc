@@ -1,0 +1,213 @@
+[gd_scene load_steps=17 format=3 uid="uid://xmg5ntf35to6"]
+
+[ext_resource type="Script" uid="uid://cxo8nn0arl8fe" path="res://Scenes/NotMilesEdgeworth/enemy_battler.gd" id="1_51p1j"]
+[ext_resource type="Texture2D" uid="uid://cxlxaxgv81dft" path="res://Assets/cursor_finger.png" id="2_2wvs3"]
+[ext_resource type="Resource" uid="uid://cg57dcaqs0tt2" path="res://Resources/enemy_stats.tres" id="2_oy58c"]
+[ext_resource type="Texture2D" uid="uid://dx1h0xis7dir2" path="res://Scenes/NotMilesEdgeworth/Standdownside.webp" id="3_44khv"]
+[ext_resource type="Texture2D" uid="uid://ckegq08r4bdis" path="res://Assets/bar_design2.png" id="4_51aux"]
+[ext_resource type="Texture2D" uid="uid://rupf857c8ms0" path="res://Assets/bar_design.png" id="4_jhppg"]
+[ext_resource type="Texture2D" uid="uid://lbger36wyba8" path="res://Assets/button_design.png" id="4_p4ugy"]
+[ext_resource type="FontFile" uid="uid://colynj1en6us0" path="res://Assets/rainyhearts/VeniceClassic.ttf" id="6_3ms7d"]
+[ext_resource type="Script" uid="uid://cadrso5ach6o0" path="res://Scenes/PlayerCharacters/dmg_label.gd" id="9_jo2v0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4jxba"]
+texture = ExtResource("4_jhppg")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_12om3"]
+content_margin_left = 1.0
+content_margin_top = 5.0
+texture = ExtResource("4_51aux")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 5.0
+texture_margin_bottom = 14.0
+expand_margin_left = 5.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xlymp"]
+texture = ExtResource("4_p4ugy")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="Animation" id="Animation_a4t1r"]
+resource_name = "Attack"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.166667, 0.266667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3, 0), Vector2(-6, 0), Vector2(2, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nfus7"]
+resource_name = "Hurt"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.466667, 0.866667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(100, 100, 100, 1), Color(1, 1, 1, 1), Color(100, 100, 100, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x7f3k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fsa1k"]
+_data = {
+&"Attack": SubResource("Animation_a4t1r"),
+&"Hurt": SubResource("Animation_nfus7"),
+&"RESET": SubResource("Animation_x7f3k")
+}
+
+[node name="Enemy_Battler" type="Node2D" groups=["EnemyBattler"]]
+script = ExtResource("1_51p1j")
+stats_resource = ExtResource("2_oy58c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("3_44khv")
+flip_h = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+texture_filter = 1
+offset_left = -22.0
+offset_top = -25.0
+offset_right = 188.0
+offset_bottom = 3.0
+scale = Vector2(0.2, 0.2)
+theme_override_styles/background = SubResource("StyleBoxTexture_4jxba")
+theme_override_styles/fill = SubResource("StyleBoxTexture_12om3")
+max_value = 200.0
+rounded = true
+show_percentage = false
+
+[node name="SelectTargetButton" type="Button" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -30.0
+offset_top = -6.0
+offset_right = 58.0
+offset_bottom = 27.0
+scale = Vector2(0.25, 0.25)
+theme_override_colors/font_color = Color(1, 0.972549, 0.839216, 1)
+theme_override_fonts/font = ExtResource("6_3ms7d")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxTexture_xlymp")
+text = "SELECT"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fsa1k")
+}
+
+[node name="Focus" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-11, 1)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_2wvs3")
+
+[node name="HP" type="Label" parent="."]
+texture_filter = 1
+offset_left = -21.0
+offset_top = -30.0
+offset_right = -8.0
+offset_bottom = -23.0
+theme_override_colors/font_color = Color(1, 0.972549, 0.839216, 1)
+theme_override_colors/font_outline_color = Color(0.188235, 0.0235294, 0, 1)
+theme_override_fonts/font = ExtResource("6_3ms7d")
+theme_override_font_sizes/font_size = 6
+text = "HP:"
+
+[node name="dmg_label" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = 3.0
+offset_top = -21.0
+offset_right = 18.0
+offset_bottom = -11.0
+theme_override_fonts/font = ExtResource("6_3ms7d")
+theme_override_font_sizes/font_size = 9
+text = "dhg"
+script = ExtResource("9_jo2v0")
+
+[connection signal="pressed" from="SelectTargetButton" to="." method="_on_select_target_button_pressed"]

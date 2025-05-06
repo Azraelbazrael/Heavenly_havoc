@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://dbi6b5f6sjslw"]
+
+[ext_resource type="Texture2D" uid="uid://evq08sjebgiv" path="res://Assets/rpg_spinoff_textbox.png" id="1_6oc2r"]
+[ext_resource type="FontFile" uid="uid://cckje28m0o0w7" path="res://Assets/rainyhearts/rainyhearts.ttf" id="2_8og7d"]
+[ext_resource type="Script" uid="uid://dh1b3w4vn6coo" path="res://Scenes/PlayerCharacters/label.gd" id="3_15d8v"]
+[ext_resource type="Script" uid="uid://dqgmn3tsuxt8" path="res://Scenes/PlayerCharacters/name_header.gd" id="3_dp52c"]
+
+[node name="exp_box" type="Node2D" groups=["ExpBox"]]
+position = Vector2(2, 5)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_left = -39.0
+offset_top = -41.0
+offset_right = 36.0
+offset_bottom = 38.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_6oc2r")
+patch_margin_left = 32
+patch_margin_top = 16
+patch_margin_right = 32
+patch_margin_bottom = 32
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="TextContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TextContainer"]
+layout_mode = 2
+
+[node name="name_header" type="Label" parent="MarginContainer/TextContainer/VBoxContainer" groups=["ExpBox"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_8og7d")
+theme_override_font_sizes/font_size = 14
+text = "fxghg"
+script = ExtResource("3_dp52c")
+
+[node name="Level_text" type="Label" parent="MarginContainer/TextContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_8og7d")
+theme_override_font_sizes/font_size = 12
+text = "dfhdhdgh"
+script = ExtResource("3_15d8v")
