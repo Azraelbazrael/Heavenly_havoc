@@ -14,6 +14,7 @@ metadata/_custom_type_script = "uid://b3bmhwe2pkdpm"
 
 [resource]
 script = ExtResource("1_213co")
-spell_name = "Angelic_whim"
+targets = 2
+spell_name = "Angelic whim"
 spell_behaviour = SubResource("Resource_4kf5u")
 metadata/_custom_type_script = "uid://ys0v6hidmvp7"

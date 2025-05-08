@@ -14,11 +14,9 @@ extends Node2D
 @onready var dmg_label: Label = $dmg_label
 
 
-#var healing_spell = _get_spell("healing_spell")
-#var angelic_whim = _get_spell("angelic_whim")
-
 var current_hp : int
 var current_mp: int
+var sp_damage: int
 var exp_required = get_level_exp(level +1)
 #var enemy_battlers = []
 signal dead(this_battler: Node2D)
@@ -54,6 +52,7 @@ func stop_turn() -> void:
 
 ## Attacks start here
 func start_attacking(enemy_target: Node2D) -> void:
+	
 	await get_tree().create_timer(0.3).timeout
 	play_attack_anim()
 	await get_tree().create_timer(0.6).timeout
@@ -74,18 +73,22 @@ func _get_attack_damage() -> int:
 	return round( 1.5 * stats_resource.attack)
 
 	
-#func _get_spell(Name):	
-	#var scene = load("res://Resources/spells/" + Name + "/" + Name + ".tscn")
-	#var scene_node = scene.instantiate()
-	#add_child(scene_node)
+func start_blasting(enemy_target: Node2D) -> void:
 	
-	
-	#return scene_node
-	
-func _cast_spell():
-	
-	_show_label()
+	await get_tree().create_timer(0.3).timeout
+	play_attack_anim()
+	await get_tree().create_timer(0.6).timeout
+	enemy_target.play_hit_anim()
+	await get_tree().create_timer(0.6).timeout
+	enemy_target.take_damage(_cast_spell())
+	await get_tree().create_timer(0.6).timeout
 	turn_ended.emit()
+	
+func _cast_spell() -> int:
+	for magic in stats_resource.spell_slots.attack_slots:
+		sp_damage = magic.spell_behaviour.get_spell_perform() * (stats_resource.attack * 0.5)
+	
+	return sp_damage
 
 func _show_label():
 	dmg_label.show()

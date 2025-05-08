@@ -1,28 +1,18 @@
-[gd_scene load_steps=21 format=3 uid="uid://bu7olwe1qsktr"]
+[gd_scene load_steps=19 format=3 uid="uid://bu7olwe1qsktr"]
 
 [ext_resource type="Script" uid="uid://djw4i53wvtfua" path="res://Scenes/BattleScene/battle_manager.gd" id="1_wedt3"]
 [ext_resource type="Texture2D" uid="uid://cn453as5m0lfy" path="res://Assets/Free-City-Backgrounds-Pixel-Art3.png" id="2_84gho"]
 [ext_resource type="Texture2D" uid="uid://evq08sjebgiv" path="res://Assets/rpg_spinoff_textbox.png" id="3_fm71s"]
+[ext_resource type="PackedScene" uid="uid://bj8ohxopmwf2r" path="res://Scenes/BattleScene/wave_box.tscn" id="3_hyhvh"]
 [ext_resource type="FontFile" uid="uid://colynj1en6us0" path="res://Assets/rainyhearts/VeniceClassic.ttf" id="4_fldva"]
-[ext_resource type="Script" uid="uid://bmhjvaawplwfc" path="res://Scenes/BattleScene/wave_text.gd" id="5_sgarw"]
 [ext_resource type="PackedScene" uid="uid://r63pjdmyfdo2" path="res://Scenes/BattleScene/text_box.tscn" id="6_2wi7a"]
+[ext_resource type="Script" uid="uid://dvgtrk26pysd3" path="res://Scenes/BattleScene/choice.gd" id="7_b31p0"]
 [ext_resource type="Texture2D" uid="uid://lbger36wyba8" path="res://Assets/button_design.png" id="7_crhtt"]
 [ext_resource type="FontFile" uid="uid://cckje28m0o0w7" path="res://Assets/rainyhearts/rainyhearts.ttf" id="8_anksw"]
 [ext_resource type="Script" uid="uid://c7gk2gjftr51y" path="res://Scenes/PlayerCharacters/hp_text.gd" id="9_ltlgs"]
 [ext_resource type="PackedScene" uid="uid://k3o0sgyptatq" path="res://Scenes/PlayerCharacters/player_battler.tscn" id="10_dk7nb"]
 [ext_resource type="Resource" uid="uid://dvii027hmwl75" path="res://Resources/charon_stats.tres" id="12_wojdw"]
 [ext_resource type="Texture2D" uid="uid://djyv5p612bs7k" path="res://Scenes/PlayerCharacters/charon_sprite.png" id="13_vs0n3"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ihivw"]
-texture = ExtResource("3_fm71s")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-texture_margin_bottom = 32.0
-expand_margin_left = 2.0
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
-region_rect = Rect2(0, 0, 96, 96)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0gv6i"]
 texture = ExtResource("7_crhtt")
@@ -76,18 +66,6 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 region_rect = Rect2(0, 0, 96, 96)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3or4"]
-bg_color = Color(0.109804, 0.0470588, 0, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_10jli"]
-texture = ExtResource("7_crhtt")
-texture_margin_left = 2.0
-texture_margin_right = 2.0
-expand_margin_left = 4.0
-expand_margin_top = 4.0
-expand_margin_right = 5.0
-expand_margin_bottom = 4.0
-
 [node name="Battle_Scene" type="Node2D"]
 script = ExtResource("1_wedt3")
 
@@ -105,25 +83,7 @@ stretch_mode = 4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="wave_check" type="Panel" parent="CanvasLayer"]
-texture_filter = 1
-offset_left = 7.0
-offset_top = 2.0
-offset_right = 75.0
-offset_bottom = 42.0
-theme_override_styles/panel = SubResource("StyleBoxTexture_ihivw")
-
-[node name="wave_text" type="Label" parent="CanvasLayer/wave_check"]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 11.0
-offset_right = 54.0
-offset_bottom = 34.0
-theme_override_colors/font_color = Color(0.945098, 0.921569, 0.8, 1)
-theme_override_fonts/font = ExtResource("4_fldva")
-theme_override_font_sizes/font_size = 14
-text = "fthfghf"
-script = ExtResource("5_sgarw")
+[node name="wave_check" parent="CanvasLayer" instance=ExtResource("3_hyhvh")]
 
 [node name="textbox" parent="CanvasLayer" instance=ExtResource("6_2wi7a")]
 offset_left = 70.0
@@ -155,6 +115,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.4, 0.4)
 size_flags_horizontal = 8
+script = ExtResource("7_b31p0")
 
 [node name="attack" type="Button" parent="CanvasLayer/choice"]
 texture_filter = 1
@@ -208,51 +169,6 @@ text = "gch"
 autowrap_mode = 3
 script = ExtResource("9_ltlgs")
 
-[node name="Panel" type="Panel" parent="CanvasLayer"]
-visible = false
-offset_left = -1.0
-offset_top = -1.0
-offset_right = 256.0
-offset_bottom = 192.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_j3or4")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel"]
-layout_mode = 0
-offset_left = 93.0
-offset_top = 22.0
-offset_right = 183.0
-offset_bottom = 45.0
-scale = Vector2(0.7, 0.7)
-theme_override_fonts/normal_font = ExtResource("4_fldva")
-theme_override_font_sizes/normal_font_size = 19
-text = "?"
-fit_content = true
-scroll_active = false
-tab_size = 0
-
-[node name="continue_button" type="Button" parent="CanvasLayer/Panel"]
-layout_mode = 0
-offset_left = 88.0
-offset_top = 148.0
-offset_right = 166.0
-offset_bottom = 169.0
-theme_override_fonts/font = ExtResource("4_fldva")
-theme_override_font_sizes/font_size = 19
-theme_override_styles/normal = SubResource("StyleBoxTexture_10jli")
-text = "Continue?"
-
-[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer/Panel"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 88.0
-offset_top = 68.0
-offset_right = 168.0
-offset_bottom = 108.0
-theme_override_font_sizes/normal_font_size = 7
-bbcode_enabled = true
-text = "djdfhj"
-scroll_active = false
-
 [node name="Player_Battler" parent="." instance=ExtResource("10_dk7nb")]
 position = Vector2(169, 64)
 
@@ -273,6 +189,11 @@ position = Vector2(127, 96)
 
 [node name="Marker2D" type="Marker2D" parent="." groups=["SpawnPoints"]]
 position = Vector2(79, 85)
+
+[connection signal="pressed" from="CanvasLayer/choice/attack" to="CanvasLayer/choice" method="_on_attack_pressed"]
+[connection signal="pressed" from="CanvasLayer/choice/defend" to="CanvasLayer/choice" method="_on_defend_pressed"]
+[connection signal="pressed" from="CanvasLayer/choice/spell" to="CanvasLayer/choice" method="_on_spell_pressed"]
+[connection signal="pressed" from="CanvasLayer/choice/party" to="CanvasLayer/choice" method="_on_party_pressed"]
 
 [editable path="CanvasLayer/textbox"]
 [editable path="Player_Battler2"]

@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://diwtubx1uq0ds"]
+
+[ext_resource type="FontFile" uid="uid://colynj1en6us0" path="res://Assets/rainyhearts/VeniceClassic.ttf" id="1_uh670"]
+[ext_resource type="Script" uid="uid://en5y2vewdsyb" path="res://Scenes/BattleScene/wave_over_screen.gd" id="1_vx4tn"]
+[ext_resource type="Texture2D" uid="uid://lbger36wyba8" path="res://Assets/button_design.png" id="2_vx4tn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3or4"]
+bg_color = Color(0.109804, 0.0470588, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_10jli"]
+texture = ExtResource("2_vx4tn")
+texture_margin_left = 2.0
+texture_margin_right = 2.0
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 5.0
+expand_margin_bottom = 4.0
+
+[node name="wave_over_screen" type="Panel"]
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 256.0
+offset_bottom = 192.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_j3or4")
+script = ExtResource("1_vx4tn")
+
+[node name="Win_lose text" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 22.0
+offset_right = 183.0
+offset_bottom = 45.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/normal_font = ExtResource("1_uh670")
+theme_override_font_sizes/normal_font_size = 19
+text = "?"
+fit_content = true
+scroll_active = false
+tab_size = 0
+
+[node name="exp_text" type="RichTextLabel" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 88.0
+offset_top = 68.0
+offset_right = 168.0
+offset_bottom = 108.0
+theme_override_font_sizes/normal_font_size = 7
+bbcode_enabled = true
+text = "djdfhj"
+scroll_active = false
+
+[node name="continue_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 148.0
+offset_right = 166.0
+offset_bottom = 169.0
+theme_override_fonts/font = ExtResource("1_uh670")
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxTexture_10jli")
+text = "Continue?"

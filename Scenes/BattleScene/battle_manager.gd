@@ -6,13 +6,13 @@ extends Node2D
 @onready var defend_button: Button = $CanvasLayer/choice/defend
 @onready var spell_button: Button = $CanvasLayer/choice/spell
 
-@onready var battle_end_panel: Panel = $CanvasLayer/Panel
-@onready var battle_end_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel
+#@onready var battle_end_panel: Panel = $CanvasLayer/Wave_over_screen
+#@onready var battle_end_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel
 @onready var textbox: MarginContainer = $CanvasLayer/textbox
 @onready var textbox_text: RichTextLabel = $CanvasLayer/textbox/text/RichTextLabel
 @onready var spell_options: GridContainer = $CanvasLayer/textbox/text/SpellOptions
 @onready var cont_button: Button = $CanvasLayer/Panel/continue_button
-@onready var exp_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel2
+#@onready var exp_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel2
 
 
 @onready var player_status_text: Label = $CanvasLayer/hp_boxes/hp_text
@@ -26,11 +26,10 @@ var enemy_scene = preload("res://Scenes/NotMilesEdgeworth/enemy_battler.tscn")
 var all_battlers = []
 var current_spells = []
 
-@onready var wave_check: Label = $CanvasLayer/wave_check/wave_text
+#@onready var wave_check: Label = $CanvasLayer/wave_check/wave_text
 
 
 var current_turn_index: int
-var current_wave = 0
 var exp_earned = 0
 #var battle_over: bool
 var ready_completed: bool
@@ -43,11 +42,12 @@ func _ready() -> void:
 		p.turn_ended.connect(_next_turn)
 		p.dead.connect(_on_player_dead)
 		
-	attack_button.pressed.connect(_show_target_buttons)
+	
+	#attack_button.pressed.connect(_show_target_buttons)
 	defend_button.pressed.connect(_defending_turn)
 	spell_button.pressed.connect(_select_spell)
 	cont_button.pressed.connect(_initalize)
-	
+	Global.choose_target.connect(_show_target_buttons)
 	ready_completed = true
 	_initalize()
 	
@@ -55,11 +55,8 @@ func _ready() -> void:
 
 func _initalize() -> void:
 	## initalizes enemies to fight, resetting health and such. These guys are not native to the root scene
-#	_check_battle_end() == false
 	textbox_text.clear()
-	battle_end_panel.hide()
-	current_wave = (current_wave + 1)
-	wave_check.update_text(current_wave)
+	#battle_end_panel.hide()
 	
 
 		
@@ -80,7 +77,7 @@ func _initalize() -> void:
 	
 
 	for e in enemy_battlers:	
-		e.be_selected.connect(attack_selected_enemy) ## when enemy is attacked
+		Global.be_selected.connect(attack_selected_enemy) ## when enemy is attacked
 		e.dead.connect(_on_enemy_dead) ## when enemy dies
 		e.deal_damage.connect(attack_random_player_battler) ## when an enemy is attacking (we have a dumb ai lol)
 		
@@ -97,7 +94,8 @@ func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
 
 # calls the different turns
 func _update_turn() -> void:
-	#print(current_turn)
+	Global.casting_spell = false
+	
 	if Global.current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
 		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mana)
 		_show_flavor_text("What does %s do...?" %[Global.current_turn.stats_resource.char_name])
@@ -109,15 +107,14 @@ func _update_turn() -> void:
 	Global.current_turn.start_turn()
 		
 func _next_turn() -> void:
-	
 	Global.current_turn.stop_turn()
-	current_spells.clear()
 	if _check_battle_end() == false:
 		current_turn_index = (current_turn_index + 1) % all_battlers.size()
 		Global.current_turn = all_battlers[current_turn_index]
 		
 		_update_turn()
-	#pass
+	else:
+		pass
 
 func _hide_target_buttons() -> void:
 	for e in enemy_battlers:
@@ -125,30 +122,29 @@ func _hide_target_buttons() -> void:
 
 func _show_target_buttons() -> void:
 	turn_action_buttons.hide()
+	spell_options.hide()
 	for e in enemy_battlers:
 		e.show_select_button()
 
 func attack_selected_enemy(selected_enemy: Node2D) -> void:
 	_hide_target_buttons()
-	Global.current_turn.start_attacking(selected_enemy)
-	selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())
-	_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._get_attack_damage()])
+	spell_options.hide()
+	if Global.casting_spell == true:
+		Global.current_turn.start_blasting(selected_enemy)
+		selected_enemy.dmg_label._update_text(Global.current_turn._cast_spell())
+		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._cast_spell()])
+	else:
+		Global.current_turn.start_attacking(selected_enemy)
+		selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())
+		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._get_attack_damage()])
 
 
 func _select_spell():
+	Global.casting_spell = true
 	textbox_text.hide()
 	spell_options.show()
 	Global.emit_signal("spell_options")
-	for slots in Global.current_turn.stats_resource.spell_slots.attack_slots:
-		print(slots.spell_name)
-	
 
-func _activate_spell():
-	
-	Global.current_turn._cast_spell()
-	
-	_update_turn()
-	#pass
 	
 func attack_random_player_battler(damage: int) -> void:
 	var rand = randi_range(0, player_battlers.size() - 1)
@@ -166,7 +162,6 @@ func _defending_turn():
 func _defending(current_player: Node2D) -> void:
 	current_player.stats_resource.defending = true
 	_show_flavor_text("%s defends themselves!" %[current_player.stats_resource.char_name])
-	#await get_tree().create_timer(0.7).timeout
 	_next_turn()
 	
 func _no_longer_defending():
@@ -188,13 +183,12 @@ func _on_player_dead(dead_battler: Node2D) -> void:
 	
 func _check_battle_end() -> bool:
 	if enemy_battlers.is_empty():
-		#_show_flavor_text("You won!")
-		_show_next_wave_panel("You won!")
+		Global.emit_signal("wave_complete")
 
 		return true
 
 	if player_battlers.is_empty():
-		_show_battle_end_panel("Player Lost!")
+		Global.emit_signal("game_over")
 		return true	
 	return false
 	
@@ -204,28 +198,14 @@ func _show_flavor_text(message: String) -> void:
 	textbox_text.append_text(message)
 	textbox.show()
 
-func _show_battle_end_panel(message: String) -> void:
 	
-	battle_end_text.clear()
-	battle_end_text.append_text("[center]%s" % [message])
-	battle_end_panel.show()
-	if turn_action_buttons.visible:
-		turn_action_buttons.hide()
-		
-func _show_next_wave_panel(message: String) -> void:
-	battle_end_panel.show()
-	battle_end_text.clear()
-	battle_end_text.append_text("[center]%s" % [message])
-	load_party_exp()
+
 	
 
 func load_party_exp():
-	
+
 	var pb = player_battlers
-	
-	## figure out how to display text of both of them seperately...
-	## and how to properly have them earn exp
-	exp_text.clear()
-	for i in pb.size(): ## okay THIS works. maybe have it in a container later ...
-		pb[i].gain_exp(exp_earned)
-		exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+
+	#for i in pb.size(): 
+		#pb[i].gain_exp(exp_earned)
+		#exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])

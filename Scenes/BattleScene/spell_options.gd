@@ -13,16 +13,7 @@ func _get_char_stats():
 	_get_moves()
 
 
-#func _process(delta: float) -> void:
-	#for sb in range(spell_buttons.size()):
-		#spell_buttons[sb].pressed.connect(_button_pressed)
-		
 
-
-	
-#func _button_pressed():
-	#_get_moves()
-	#top_ui.show()
 	
 func _get_moves() -> void:
 	var move_slots = char_stats.spell_slots.attack_slots

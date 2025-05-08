@@ -10,7 +10,7 @@ extends Node2D
 
 var current_hp : int
 
-signal be_selected(this_target: Node2D)
+
 signal dead(this_enemy: Node2D)
 signal deal_damage(damage: int)
 
@@ -50,7 +50,8 @@ func hide_select_button():
 	select_target_button.hide()
 	
 func _on_select_target_button_pressed() -> void:
-	be_selected.emit(self)	
+	Global.chosen_enemy = self
+	Global.be_selected.emit(self)	
 	
 ## ATTACKS START HERE
 

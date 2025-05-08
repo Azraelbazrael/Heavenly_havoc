@@ -49,24 +49,49 @@ scroll_active = false
 [node name="SpellOptions" type="GridContainer" parent="text"]
 visible = false
 texture_filter = 1
+clip_contents = true
 layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/h_separation = 0
 columns = 2
 script = ExtResource("4_mtc80")
 
 [node name="Button" type="Button" parent="text/SpellOptions"]
+clip_contents = true
+custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_nqpoh")
+theme_override_font_sizes/font_size = 8
+text = "ghcvc"
 script = ExtResource("5_qnxcp")
 
 [node name="Button2" type="Button" parent="text/SpellOptions"]
+custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_nqpoh")
+theme_override_font_sizes/font_size = 8
+text = "fghfgh"
 script = ExtResource("5_qnxcp")
 
 [node name="Button3" type="Button" parent="text/SpellOptions"]
+custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nqpoh")
+theme_override_font_sizes/font_size = 8
+text = "cghgh"
 script = ExtResource("5_qnxcp")
 
 [node name="Button4" type="Button" parent="text/SpellOptions"]
+custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nqpoh")
+theme_override_font_sizes/font_size = 8
+text = "xfgxfg"
 script = ExtResource("5_qnxcp")
+
+[connection signal="pressed" from="text/SpellOptions/Button" to="text/SpellOptions/Button" method="_on_pressed"]
+[connection signal="pressed" from="text/SpellOptions/Button2" to="text/SpellOptions/Button2" method="_on_pressed"]
+[connection signal="pressed" from="text/SpellOptions/Button3" to="text/SpellOptions/Button3" method="_on_pressed"]
+[connection signal="pressed" from="text/SpellOptions/Button4" to="text/SpellOptions/Button4" method="_on_pressed"]

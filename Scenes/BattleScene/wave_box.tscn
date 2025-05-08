@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bj8ohxopmwf2r"]
+
+[ext_resource type="Texture2D" uid="uid://evq08sjebgiv" path="res://Assets/rpg_spinoff_textbox.png" id="1_7ht4x"]
+[ext_resource type="FontFile" uid="uid://colynj1en6us0" path="res://Assets/rainyhearts/VeniceClassic.ttf" id="2_f7p7v"]
+[ext_resource type="Script" uid="uid://bmhjvaawplwfc" path="res://Scenes/BattleScene/wave_text.gd" id="3_nrp70"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ihivw"]
+texture = ExtResource("1_7ht4x")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+expand_margin_left = 2.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 0, 96, 96)
+
+[node name="wave_check" type="Panel"]
+texture_filter = 1
+offset_left = 7.0
+offset_top = 2.0
+offset_right = 75.0
+offset_bottom = 42.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_ihivw")
+
+[node name="wave_text" type="Label" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 11.0
+offset_right = 54.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.945098, 0.921569, 0.8, 1)
+theme_override_fonts/font = ExtResource("2_f7p7v")
+theme_override_font_sizes/font_size = 14
+text = "fthfghf"
+script = ExtResource("3_nrp70")
