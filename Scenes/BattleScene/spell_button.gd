@@ -14,8 +14,7 @@ func _cast_spell():
 			spell.cast_all(get_tree().get_nodes_in_group("PlayerBattler"))
 		spell.Targets.Enemy:
 			Global.emit_signal("choose_target")
-			
-			
+		
 		spell.Targets.All_Enemies:
 			spell.cast_all(get_tree().get_nodes_in_group("EnemyBattler"))
 	
