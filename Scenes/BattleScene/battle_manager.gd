@@ -79,7 +79,7 @@ func _initalize() -> void:
 
 	for e in enemy_battlers:	
 		e.dead.connect(_on_enemy_dead) ## when enemy dies
-		e.deal_damage.connect(attack_random_player_battler) ## when an enemy is attacking (we have a dumb ai lol)
+		e.deal_damage.connect(attack_random_player_battler) ## when an enemy is attacking 
 		
 		
 	Global.current_turn = all_battlers[current_turn_index] ## sorts all battlers on the field via turn orders
