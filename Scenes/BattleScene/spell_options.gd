@@ -17,8 +17,9 @@ func _get_char_stats():
 	
 func _get_moves() -> void:
 	var move_slots = char_stats.spell_slots.attack_slots
-	spell_buttons.resize(move_slots.size())
-	for sb in range(spell_buttons.size()):
-		spell_buttons[sb].spell = (move_slots[sb])
-		spell_buttons[sb].text = (move_slots[sb].spell_name)
+	if move_slots:
+		spell_buttons.resize(move_slots.size())
+		for sb in range(spell_buttons.size()):
+			spell_buttons[sb].spell = (move_slots[sb])
+			spell_buttons[sb].text = (move_slots[sb].spell_name)
 		

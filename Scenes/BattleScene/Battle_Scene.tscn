@@ -82,6 +82,7 @@ expand_mode = 3
 stretch_mode = 4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
 
 [node name="wave_check" parent="CanvasLayer" instance=ExtResource("3_hyhvh")]
 

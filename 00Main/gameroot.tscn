@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://lkkhw6kvracu"]
+
+[ext_resource type="Script" uid="uid://dhaxpk83kvoab" path="res://00Main/gameroot.gd" id="1_0fdtv"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0fdtv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 3

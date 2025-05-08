@@ -11,5 +11,5 @@ var current_turn: Node2D
 var chosen_enemy: Node2D
 var casting_spell: bool = false
 
-var current_wave = 0
-var total_enemy_exp = 0
+var current_wave: int = 0
+var total_enemy_exp: int = 0

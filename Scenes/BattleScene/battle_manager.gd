@@ -6,13 +6,12 @@ extends Node2D
 @onready var defend_button: Button = $CanvasLayer/choice/defend
 @onready var spell_button: Button = $CanvasLayer/choice/spell
 
-#@onready var battle_end_panel: Panel = $CanvasLayer/Wave_over_screen
-#@onready var battle_end_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel
+
 @onready var textbox: MarginContainer = $CanvasLayer/textbox
 @onready var textbox_text: RichTextLabel = $CanvasLayer/textbox/text/RichTextLabel
 @onready var spell_options: GridContainer = $CanvasLayer/textbox/text/SpellOptions
-@onready var cont_button: Button = $CanvasLayer/Panel/continue_button
-#@onready var exp_text: RichTextLabel = $CanvasLayer/Panel/RichTextLabel2
+
+
 
 
 @onready var player_status_text: Label = $CanvasLayer/hp_boxes/hp_text
@@ -30,8 +29,6 @@ var current_spells = []
 
 
 var current_turn_index: int
-var exp_earned = 0
-#var battle_over: bool
 var ready_completed: bool
 
 
@@ -43,22 +40,21 @@ func _ready() -> void:
 		p.dead.connect(_on_player_dead)
 		
 	
-	#attack_button.pressed.connect(_show_target_buttons)
 	defend_button.pressed.connect(_defending_turn)
 	spell_button.pressed.connect(_select_spell)
-	cont_button.pressed.connect(_initalize)
 	Global.choose_target.connect(_show_target_buttons)
+	Global.connect("init_battle", _initalize)
+	Global.connect("be_selected", attack_selected_enemy) ## when enemy is attacked
+	
 	ready_completed = true
-	_initalize()
+	Global.emit_signal("init_battle")
 	
 
 
 func _initalize() -> void:
 	## initalizes enemies to fight, resetting health and such. These guys are not native to the root scene
 	textbox_text.clear()
-	Global.emit_signal("init_battle")
-	
-
+	canvas_layer.show()
 		
 	for spawnpoint in get_tree().get_nodes_in_group("SpawnPoints"): ## With each marker marked as spawnpoints there will be (1) enemy
 		if spawnpoint is Marker2D:
@@ -71,13 +67,15 @@ func _initalize() -> void:
 	enemy_battlers = get_tree().get_nodes_in_group("EnemyBattler") ## again its important this is after the ready function so it registers it properly
 	
 	## Adds players and battlers to the array
-	all_battlers.append_array(player_battlers)
+	if Global.current_wave == 1: ## so players arent added twice/thrice between waves
+		all_battlers.append_array(player_battlers)
+		
+		
 	all_battlers.append_array(enemy_battlers)
 	all_battlers.sort_custom(_sort_turn_order_ascending)
 	
 
 	for e in enemy_battlers:	
-		Global.be_selected.connect(attack_selected_enemy) ## when enemy is attacked
 		e.dead.connect(_on_enemy_dead) ## when enemy dies
 		e.deal_damage.connect(attack_random_player_battler) ## when an enemy is attacking (we have a dumb ai lol)
 		
@@ -95,7 +93,6 @@ func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
 # calls the different turns
 func _update_turn() -> void:
 	Global.casting_spell = false
-	
 	if Global.current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
 		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mana)
 		_show_flavor_text("What does %s do...?" %[Global.current_turn.stats_resource.char_name])
@@ -183,12 +180,15 @@ func _on_player_dead(dead_battler: Node2D) -> void:
 	
 func _check_battle_end() -> bool:
 	if enemy_battlers.is_empty():
+		canvas_layer.hide()
 		Global.emit_signal("wave_complete")
-
+		
 		return true
 
 	if player_battlers.is_empty():
+		canvas_layer.hide()
 		Global.emit_signal("game_over")
+		
 		return true	
 	return false
 	
@@ -201,11 +201,3 @@ func _show_flavor_text(message: String) -> void:
 	
 
 	
-
-#func load_party_exp():
-
-	#var pb = player_battlers
-
-	#for i in pb.size(): 
-		#pb[i].gain_exp(exp_earned)
-		#exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])

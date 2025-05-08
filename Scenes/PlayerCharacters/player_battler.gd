@@ -81,13 +81,14 @@ func start_blasting(enemy_target: Node2D) -> void:
 	enemy_target.play_hit_anim()
 	await get_tree().create_timer(0.6).timeout
 	enemy_target.take_damage(_cast_spell())
+	
 	await get_tree().create_timer(0.6).timeout
 	turn_ended.emit()
 	
 func _cast_spell() -> int:
 	for magic in stats_resource.spell_slots.attack_slots:
-		sp_damage = magic.spell_behaviour.get_spell_perform() * (stats_resource.attack * 0.5)
-	
+		sp_damage = magic.spell_behaviour.get_spell_perform()
+		magic.cast(Global.current_turn)	
 	return sp_damage
 
 func _show_label():

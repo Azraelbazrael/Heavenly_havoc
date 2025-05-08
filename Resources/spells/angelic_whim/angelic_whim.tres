@@ -7,9 +7,9 @@
 script = ExtResource("2_a5dik")
 type = 1
 spell_name = "Angelic Whim"
-min_roll = 12
-max_roll = 20
-mana_cost = 10
+min_roll = 50
+max_roll = 100
+mana_cost = 30
 metadata/_custom_type_script = "uid://b3bmhwe2pkdpm"
 
 [resource]
