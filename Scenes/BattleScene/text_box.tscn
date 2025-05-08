@@ -63,7 +63,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_nqpoh")
 theme_override_font_sizes/font_size = 8
-text = "ghcvc"
+text = "???"
 script = ExtResource("5_qnxcp")
 
 [node name="Button2" type="Button" parent="text/SpellOptions"]
@@ -72,7 +72,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_nqpoh")
 theme_override_font_sizes/font_size = 8
-text = "fghfgh"
+text = "???"
 script = ExtResource("5_qnxcp")
 
 [node name="Button3" type="Button" parent="text/SpellOptions"]
@@ -80,7 +80,7 @@ custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nqpoh")
 theme_override_font_sizes/font_size = 8
-text = "cghgh"
+text = "???"
 script = ExtResource("5_qnxcp")
 
 [node name="Button4" type="Button" parent="text/SpellOptions"]
@@ -88,7 +88,7 @@ custom_minimum_size = Vector2(20, 10)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nqpoh")
 theme_override_font_sizes/font_size = 8
-text = "xfgxfg"
+text = "???"
 script = ExtResource("5_qnxcp")
 
 [connection signal="pressed" from="text/SpellOptions/Button" to="text/SpellOptions/Button" method="_on_pressed"]

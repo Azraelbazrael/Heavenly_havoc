@@ -41,10 +41,14 @@ func _ready() -> void:
 		
 	
 	defend_button.pressed.connect(_defending_turn)
-	spell_button.pressed.connect(_select_spell)
-	Global.choose_target.connect(_show_target_buttons)
-	Global.connect("init_battle", _initalize)
+
+	Global.connect("choose_target", _show_target_buttons) ## prompts player to choose target
+	#Global.connect("spelless", _no_spells) ## used when spells list is called when player char has no spells
+	Global.connect("spell_options", _select_spell) ## shows spell array from players
+	Global.connect("init_battle", _initalize) ## creates new battle/enemies
 	Global.connect("be_selected", attack_selected_enemy) ## when enemy is attacked
+	
+	
 	
 	ready_completed = true
 	Global.emit_signal("init_battle")
@@ -58,7 +62,6 @@ func _initalize() -> void:
 		
 	for spawnpoint in get_tree().get_nodes_in_group("SpawnPoints"): ## With each marker marked as spawnpoints there will be (1) enemy
 		if spawnpoint is Marker2D:
-			#anim_player.play("Battle_start")
 			var enemy = enemy_scene.instantiate()
 			add_child(enemy)
 			enemy.position = spawnpoint.position
@@ -93,14 +96,15 @@ func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
 # calls the different turns
 func _update_turn() -> void:
 	Global.casting_spell = false
+	#print(Global.current_turn.stats_resource.char_name)
 	if Global.current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
-		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mana)
+		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mp)
 		_show_flavor_text("What does %s do...?" %[Global.current_turn.stats_resource.char_name])
 		turn_action_buttons.show()
 		_no_longer_defending()
 	else:
 		pass
-		#turn_action_buttons.hide()
+		
 	Global.current_turn.start_turn()
 		
 func _next_turn() -> void:
@@ -140,7 +144,14 @@ func _select_spell():
 	Global.casting_spell = true
 	textbox_text.hide()
 	spell_options.show()
-	Global.emit_signal("spell_options")
+	if Global.has_no_spells == true:
+		_no_spells()
+		
+func _no_spells():
+	Global.has_no_spells = true
+	spell_options.hide()
+	textbox_text.show()
+	_show_flavor_text("%s has NO SPELLS." %[Global.current_turn.stats_resource.char_name])
 
 	
 func attack_random_player_battler(damage: int) -> void:
@@ -192,11 +203,10 @@ func _check_battle_end() -> bool:
 		return true	
 	return false
 	
-
 func _show_flavor_text(message: String) -> void:
 	textbox_text.clear()
 	textbox_text.append_text(message)
-	textbox.show()
+	textbox_text.show()
 
 	
 

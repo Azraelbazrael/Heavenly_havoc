@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="HealingSpell" load_steps=2 format=3 uid="uid://c4bin2mqtqsvs"]
+
+[ext_resource type="Script" uid="uid://bm4knak7121x7" path="res://Resources/spells/healing_spells/healing_spell.gd" id="1_np7p2"]
+
+[resource]
+script = ExtResource("1_np7p2")
+type = 0
+spell_name = "soft prayer"
+min_roll = 20
+max_roll = 30
+mana_cost = 40
+metadata/_custom_type_script = "uid://bm4knak7121x7"

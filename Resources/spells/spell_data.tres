@@ -6,6 +6,6 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_hc55b")
-type = 0
+targets = 2
 spell_name = ""
 spell_behaviour = ExtResource("2_j8umd")

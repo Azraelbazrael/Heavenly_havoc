@@ -26,13 +26,13 @@ func _ready():
 	
 	stop_turn()
 	current_hp = stats_resource.max_hp
-	current_mp = stats_resource.max_mana
+	current_mp = stats_resource.max_mp
 	_update_progress_bar()
 
 func _update_progress_bar() -> void:
 	hp_bar.max_value = stats_resource.max_hp
 	hp_bar.value = current_hp
-	mana_bar.max_value = stats_resource.max_mana
+	mana_bar.max_value = stats_resource.max_mp
 	mana_bar.value = current_mp
 		
 func focus():
@@ -81,8 +81,6 @@ func start_blasting(enemy_target: Node2D) -> void:
 	enemy_target.play_hit_anim()
 	await get_tree().create_timer(0.6).timeout
 	enemy_target.take_damage(_cast_spell())
-	for magic in stats_resource.spell_slots.attack_slots:
-		magic.cast(self)
 	await get_tree().create_timer(0.6).timeout
 	turn_ended.emit()
 	
@@ -125,7 +123,6 @@ func gain_exp(amount: int):
 		level_up()
 
 func level_up():
-	#var earned_points = randi_range(1,5)
 	level += 1
 	exp_required = get_level_exp(level + 1)
 	# figure out how to scale enemies to your level somehow

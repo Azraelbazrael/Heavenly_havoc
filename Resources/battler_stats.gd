@@ -22,7 +22,7 @@ enum BattlerType{
 @export var style: int
 
 @export_category("Player Stats")
-@export var max_mana: int
+@export var max_mp: int
 @export var defending: bool
 @export var base_lvl: int
 @export var experience: int

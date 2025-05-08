@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="BattlerStats" load_steps=6 format=3 uid="uid://dh5g6simh4rd1"]
+[gd_resource type="Resource" script_class="BattlerStats" load_steps=7 format=3 uid="uid://dh5g6simh4rd1"]
 
 [ext_resource type="Script" uid="uid://clh6od4i0ebdw" path="res://Resources/battler_stats.gd" id="1_e2y8r"]
 [ext_resource type="Script" uid="uid://b1nhv4e2kos5c" path="res://Resources/Movepool.gd" id="2_yhl7x"]
 [ext_resource type="Script" uid="uid://ys0v6hidmvp7" path="res://Resources/spells/spell_data.gd" id="3_01cwn"]
-[ext_resource type="Resource" uid="uid://bbke6dfy3syv4" path="res://Resources/spells/angelic_whim/angelic_whim.tres" id="4_ppl72"]
+[ext_resource type="Resource" uid="uid://bbke6dfy3syv4" path="res://Resources/spells/damaging_spells/angelic_whim.tres" id="3_ppl72"]
+[ext_resource type="Resource" uid="uid://da566021nieey" path="res://Resources/spells/healing_spells/soft_player_data.tres" id="4_ppl72"]
 
 [sub_resource type="Resource" id="Resource_01cwn"]
 script = ExtResource("2_yhl7x")
-attack_slots = Array[ExtResource("3_01cwn")]([ExtResource("4_ppl72")])
+attack_slots = Array[ExtResource("3_01cwn")]([ExtResource("3_ppl72"), ExtResource("4_ppl72")])
 metadata/_custom_type_script = "uid://b1nhv4e2kos5c"
 
 [resource]
@@ -23,7 +24,7 @@ magic = 70
 unity = 20
 intelligence = 20
 style = 50
-max_mana = 800
+max_mp = 500
 defending = false
 base_lvl = 1
 experience = 0

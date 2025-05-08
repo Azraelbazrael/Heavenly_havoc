@@ -1,6 +1,13 @@
-[gd_resource type="Resource" script_class="BattlerStats" load_steps=2 format=3 uid="uid://dvii027hmwl75"]
+[gd_resource type="Resource" script_class="BattlerStats" load_steps=5 format=3 uid="uid://dvii027hmwl75"]
 
 [ext_resource type="Script" uid="uid://clh6od4i0ebdw" path="res://Resources/battler_stats.gd" id="1_ns5l0"]
+[ext_resource type="Script" uid="uid://ys0v6hidmvp7" path="res://Resources/spells/spell_data.gd" id="2_4qwou"]
+[ext_resource type="Script" uid="uid://b1nhv4e2kos5c" path="res://Resources/Movepool.gd" id="3_pw0ar"]
+
+[sub_resource type="Resource" id="Resource_4qwou"]
+script = ExtResource("3_pw0ar")
+attack_slots = Array[ExtResource("2_4qwou")]([])
+metadata/_custom_type_script = "uid://b1nhv4e2kos5c"
 
 [resource]
 resource_name = "Charon"
@@ -15,7 +22,8 @@ magic = 30
 unity = 70
 intelligence = 0
 style = 0
-max_mana = 500
+max_mp = 50
 defending = false
 base_lvl = 1
 experience = 0
+spell_slots = SubResource("Resource_4qwou")

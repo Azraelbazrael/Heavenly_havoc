@@ -6,16 +6,19 @@ extends VBoxContainer
 
 
 func _on_attack_pressed() -> void:
+	Global.casting_spell = false
 	Global.emit_signal("choose_target")
 
 
 func _on_defend_pressed() -> void:
+	Global.casting_spell = false
 	pass # Replace with function body.
 
 
 func _on_spell_pressed() -> void:
-	pass # Replace with function body.
+	Global.emit_signal("spell_options")
 
 
 func _on_party_pressed() -> void:
+	Global.casting_spell = false
 	pass # Replace with function body.

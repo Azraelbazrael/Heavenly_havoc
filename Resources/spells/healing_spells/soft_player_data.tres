@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=3 format=3 uid="uid://da566021nieey"]
+
+[ext_resource type="Script" uid="uid://ys0v6hidmvp7" path="res://Resources/spells/spell_data.gd" id="1_pfle2"]
+[ext_resource type="Resource" uid="uid://c4bin2mqtqsvs" path="res://Resources/spells/healing_spells/soft_prayer.tres" id="2_d1442"]
+
+[resource]
+script = ExtResource("1_pfle2")
+targets = 0
+spell_name = "Soft Prayer"
+spell_behaviour = ExtResource("2_d1442")
+metadata/_custom_type_script = "uid://ys0v6hidmvp7"
