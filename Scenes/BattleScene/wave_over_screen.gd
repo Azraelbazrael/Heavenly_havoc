@@ -2,11 +2,16 @@ extends Panel
 
 
 var flavor_text: RichTextEffect
-var cont_button: Button
+var _button: Button
+
 @onready var win_lose_text = $"Win_lose text"
+@onready var exp_text = $exp_text
+@onready var cont_button = $continue_button
 
 func _ready() -> void:
-	pass
+	Global.connect("init_battle", hide_screen_)
+	Global.connect("wave_complete", on_win)
+	Global.connect("game_over", on_lose)
 
 ##changing text	
 func change_win_text(message: String):
@@ -15,11 +20,11 @@ func change_win_text(message: String):
 	
 	
 func change_button_text(message:String):
-	pass
-	#cont_button.text.clear()
-	#cont_button.append_text(message)
+	_button = cont_button
+	_button.text = (message)
 	
 func on_win():
+	self.show()
 	win_lose_text = flavor_text
 	change_win_text("BATTLE COMPLETE")
 	change_button_text("CONTINUE?")
@@ -27,21 +32,22 @@ func on_win():
 	return
 	
 func on_lose():
+	self.show()
 	win_lose_text = flavor_text
 	change_win_text("BATTLE LOST")
 	change_button_text("RETRY")
 	return
 	
 func update_exp():
-	var pbattlers = get_tree().get_nodes_in_group("PlayerBattler")
-	for pb in pbattlers.size():
-		pb[i].gain_exp(exp_earned)
-		exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+	var pb = get_tree().get_nodes_in_group("PlayerBattler")
+	exp_text - flavor_text
+	for i in pb.size():
+		pb[i].gain_exp(Global.total_enemy_exp)
+		change_win_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+	return
+	
+	
 ##showing visibility
-
-func show_screen():
-	pass
-
 func hide_screen_():
-	pass
+	self.hide()
 	

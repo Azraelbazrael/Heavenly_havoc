@@ -56,7 +56,7 @@ func _ready() -> void:
 func _initalize() -> void:
 	## initalizes enemies to fight, resetting health and such. These guys are not native to the root scene
 	textbox_text.clear()
-	#battle_end_panel.hide()
+	Global.emit_signal("init_battle")
 	
 
 		
@@ -170,7 +170,7 @@ func _no_longer_defending():
 	
 #On death!!
 func _on_enemy_dead(dead_enemy: Node2D) -> void:
-	exp_earned += dead_enemy.stats_resource.experience
+	Global.total_enemy_exp += dead_enemy.stats_resource.experience
 	enemy_battlers.erase(dead_enemy)
 	all_battlers.erase(dead_enemy)
 	remove_child(dead_enemy)
@@ -202,9 +202,9 @@ func _show_flavor_text(message: String) -> void:
 
 	
 
-func load_party_exp():
+#func load_party_exp():
 
-	var pb = player_battlers
+	#var pb = player_battlers
 
 	#for i in pb.size(): 
 		#pb[i].gain_exp(exp_earned)
