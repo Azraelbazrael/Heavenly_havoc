@@ -24,9 +24,11 @@ signal turn_ended
 
 func _ready():
 	
+	Global.casted.connect(_cast_spell)
 	stop_turn()
 	current_hp = stats_resource.max_hp
 	current_mp = stats_resource.max_mp
+	
 	_update_progress_bar()
 
 func _update_progress_bar() -> void:
@@ -80,14 +82,12 @@ func start_blasting(enemy_target: Node2D) -> void:
 	await get_tree().create_timer(0.6).timeout
 	enemy_target.play_hit_anim()
 	await get_tree().create_timer(0.6).timeout
-	enemy_target.take_damage(_cast_spell())
+	enemy_target.take_damage(sp_damage)
 	await get_tree().create_timer(0.6).timeout
 	turn_ended.emit()
 	
-func _cast_spell() -> int:
-	for magic in stats_resource.spell_slots.attack_slots:
-		sp_damage = magic.spell_behaviour.get_spell_perform()
-			
+func _cast_spell(spell: SpellData) -> int:
+	sp_damage =	spell.spell_behaviour.get_spell_perform()
 	return sp_damage
 
 func _show_label():

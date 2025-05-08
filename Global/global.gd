@@ -6,6 +6,7 @@ signal be_selected(this_target: Node2D)
 signal choose_target
 signal wave_complete
 signal game_over
+signal casted(SpellData)
 
 #signal spelless 
 

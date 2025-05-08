@@ -43,7 +43,6 @@ func _ready() -> void:
 	defend_button.pressed.connect(_defending_turn)
 
 	Global.connect("choose_target", _show_target_buttons) ## prompts player to choose target
-	#Global.connect("spelless", _no_spells) ## used when spells list is called when player char has no spells
 	Global.connect("spell_options", _select_spell) ## shows spell array from players
 	Global.connect("init_battle", _initalize) ## creates new battle/enemies
 	Global.connect("be_selected", attack_selected_enemy) ## when enemy is attacked
@@ -132,8 +131,8 @@ func attack_selected_enemy(selected_enemy: Node2D) -> void:
 	spell_options.hide()
 	if Global.casting_spell == true:
 		Global.current_turn.start_blasting(selected_enemy)
-		selected_enemy.dmg_label._update_text(Global.current_turn._cast_spell())
-		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._cast_spell()])
+		selected_enemy.dmg_label._update_text(Global.current_turn.sp_damage)
+		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn.sp_damage])
 	else:
 		Global.current_turn.start_attacking(selected_enemy)
 		selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())

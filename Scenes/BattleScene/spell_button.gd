@@ -8,6 +8,7 @@ func _ready() -> void:
 	
 func _cast_spell():
 	if spell:
+		Global.casted.emit(spell)
 		spell.cast(Global.current_turn)
 		Global.emit_signal("choose_target")
 	
