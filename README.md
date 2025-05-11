@@ -1,8 +1,6 @@
 # About the project
 Miracle Cafe: Heavenly Havoc is a Rouge-like turn-based RPG about balancing stats and summoning allies to defeat bosses. This takes place on a cafe on earth and centers an Angel and his harem of boys. 
 
-## Roadmap
-
 # Credits
 
 - **PLACEHOLDER SPRITES**
