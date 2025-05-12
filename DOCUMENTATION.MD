@@ -6,7 +6,7 @@ Godot 4.4 allows for Modular programming that this project takes advantage of. B
 The bulk of these are defined in an auto-loade global script found in `global.gd`, which, indicated by its namesake provides global variables and signals which scripts can reference and pass along.
 
 # Main Scene
-This section covers the main battle mechanics used within the game, covering `main.tscn`'s battle handler and how all the peices connect together.
+This section discusses the sections of code found within the main scene. This includes the battling scene, the ending panel and the other scripts these scenes heavily reference.
 ## Turn Handling
 
 ## End Panel
