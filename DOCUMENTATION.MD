@@ -43,7 +43,9 @@ func _ready() -> void:
 	Global.emit_signal("init_battle")
 	
 
-
+```
+Initalization covers instantiating enemies onto the scene. Enemies are not native to the battling scene, and therefore have to be looked for after ready is called. The textbox with flavor text with cleared and the canvas layer with UI assets are shown. From there, each character on the feild is put into an "all battlers" array, where the turn-speed stats connected to each node is sorted with ascending order.
+```sh
 func _initalize() -> void:
 	## initalizes enemies to fight, resetting health and such. These guys are not native to the root scene
 	textbox_text.clear()
