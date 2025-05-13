@@ -5,6 +5,30 @@
 Godot 4.4 allows for Modular programming that this project takes advantage of. By seperating the program into seperate slices, code has been easier to read and understand. Heavenly Havoc relies on emiting and recieving signals across different scenes in order to form a more cohesive game. 
 The bulk of these are defined in an auto-loade global script found in `global.gd`, which, indicated by its namesake provides global variables and signals which scripts can reference and pass along.
 
+
+# Global
+
+```sh
+extends Node
+signal init_battle // initiates battles
+signal spell_options //shows spells player has
+signal be_selected(this_target: Node2D) // signals that the target has been chosen for attacks
+signal choose_target // gives player option to choose targets
+signal wave_complete // when a battle is completed
+signal game_over // when all players died 
+signal casted(SpellData) // holds the spell selected to be referenced later
+
+
+
+var current_turn: Node2D
+var chosen_enemy: Node2D
+var casting_spell: bool = false
+var has_no_spells: bool
+
+var current_wave: int = 0
+var total_enemy_exp: int = 0
+```
+
 # Main Scene
 This section discusses the sections of code found within the main scene. This includes the battling scene, the ending panel and the other scripts these scenes heavily reference.
 ## Battle Manager
@@ -99,6 +123,8 @@ func _show_flavor_text(message: String) -> void:
 ```
 <br>
 
+Now that turns are sorted, the global variable `current_turn` is referenced and changed to whomever's turn-speed is the highest on the battle field. When `update_turn` is called, a condition is checked to see if the current_turn's stat resource is a player battler. When this condition is met, an asset on the screen changes it's text to display the player's stats, and shows new flavor text. If this condition is not met, the function does not do anything.
+Once these conditions are read through, in either case, the function calls for the `current_turn`'s start_turn function, found in both player and enemy battlers. As seen earlier both in the initalizing and ready functions if a battler of either type emits a `turn_ended` signal, only then is a `next_turn` function called. Next_turn changes the Node2D variable to the next battler found in the array.
 ```sh
 # calls the different turns
 func _update_turn() -> void:
@@ -126,6 +152,7 @@ func _next_turn() -> void:
 ```
 <br>
 
+The following section of functions is only considered when the player side deals damage. What these do is look for the 
 
 ```sh
 func _hide_target_buttons() -> void:
@@ -166,16 +193,6 @@ func _no_spells():
 ```
 
 ```sh
-func attack_random_player_battler(damage: int) -> void:
-	var rand = randi_range(0, player_battlers.size() - 1)
-	
-	player_battlers[rand].play_hit_anim()
-	await get_tree().create_timer(0.6).timeout
-	player_battlers[rand].take_damage(damage)
-	player_battlers[rand].dmg_label._update_text(damage)
-	await get_tree().create_timer(0.1).timeout
-	_next_turn()
-
 func _defending_turn():
 	_defending(Global.current_turn)
 
@@ -189,6 +206,21 @@ func _no_longer_defending():
 	
 	
 ```
+
+
+```sh
+func attack_random_player_battler(damage: int) -> void:
+	var rand = randi_range(0, player_battlers.size() - 1)
+	
+	player_battlers[rand].play_hit_anim()
+	await get_tree().create_timer(0.6).timeout
+	player_battlers[rand].take_damage(damage)
+	player_battlers[rand].dmg_label._update_text(damage)
+	await get_tree().create_timer(0.1).timeout
+	_next_turn()
+
+```
+
 
 ```sh
 #On death!!
