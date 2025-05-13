@@ -152,7 +152,7 @@ func _next_turn() -> void:
 ```
 <br>
 
-The following section of functions is only considered when the player side deals damage. What these do is look for the 
+The following section of functions is only considered when the player side deals damage. What these do is look for certain functions found in the enemy_battler scripts, hiding or showing a select button when prompted.
 
 ```sh
 func _hide_target_buttons() -> void:
@@ -207,6 +207,7 @@ func _no_longer_defending():
 	
 ```
 
+<br>
 
 ```sh
 func attack_random_player_battler(damage: int) -> void:
@@ -221,7 +222,7 @@ func attack_random_player_battler(damage: int) -> void:
 
 ```
 
-
+<br>
 ```sh
 #On death!!
 func _on_enemy_dead(dead_enemy: Node2D) -> void:
