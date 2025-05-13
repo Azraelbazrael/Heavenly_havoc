@@ -45,6 +45,8 @@ func _ready() -> void:
 
 ```
 Initalization covers instantiating enemies onto the scene. Enemies are not native to the battling scene, and therefore have to be looked for after ready is called. The textbox with flavor text with cleared and the canvas layer with UI assets are shown. From there, each character on the feild is put into an "all battlers" array, where the turn-speed stats connected to each node is sorted with ascending order.
+<br>
+
 ```sh
 func _initalize() -> void:
 	## initalizes enemies to fight, resetting health and such. These guys are not native to the root scene
@@ -83,6 +85,20 @@ func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
 		return true
 	return false
 ```
+The later functions all reference this one, so I'd like to elaborate on what it does really quickly. The `Battle_Scene` has a panel beneath the canvas layer, showcasing the small snippets of text throughout the battle. It opperates by referencing the RichTextLabel, clearing and appending the text over-top of it.
+```sh
+@onready var textbox: MarginContainer = $CanvasLayer/textbox
+@onready var textbox_text: RichTextLabel = $CanvasLayer/textbox/text/RichTextLabel
+```
+
+```sh
+func _show_flavor_text(message: String) -> void:
+	textbox_text.clear()
+	textbox_text.append_text(message)
+	textbox_text.show()
+```
+<br>
+
 ```sh
 # calls the different turns
 func _update_turn() -> void:
@@ -110,13 +126,6 @@ func _next_turn() -> void:
 ```
 <br>
 
-```sh
-func _show_flavor_text(message: String) -> void:
-	textbox_text.clear()
-	textbox_text.append_text(message)
-	textbox_text.show()
-```
-<br>
 
 ```sh
 func _hide_target_buttons() -> void:
