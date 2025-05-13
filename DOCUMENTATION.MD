@@ -116,6 +116,7 @@ func _show_flavor_text(message: String) -> void:
 	textbox_text.append_text(message)
 	textbox_text.show()
 ```
+<br>
 
 ```sh
 func _hide_target_buttons() -> void:
