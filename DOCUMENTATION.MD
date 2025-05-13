@@ -108,6 +108,107 @@ func _next_turn() -> void:
 	else:
 		pass
 ```
+<br>
+
+```sh
+func _show_flavor_text(message: String) -> void:
+	textbox_text.clear()
+	textbox_text.append_text(message)
+	textbox_text.show()
+```
+
+```sh
+func _hide_target_buttons() -> void:
+	for e in enemy_battlers:
+		e.hide_select_button()
+
+func _show_target_buttons() -> void:
+	turn_action_buttons.hide()
+	spell_options.hide()
+	for e in enemy_battlers:
+		e.show_select_button()
+
+func attack_selected_enemy(selected_enemy: Node2D) -> void:
+	_hide_target_buttons()
+	spell_options.hide()
+	if Global.casting_spell == true:
+		Global.current_turn.start_blasting(selected_enemy)
+		selected_enemy.dmg_label._update_text(Global.current_turn.sp_damage)
+		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn.sp_damage])
+	else:
+		Global.current_turn.start_attacking(selected_enemy)
+		selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())
+		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._get_attack_damage()])
+
+
+func _select_spell():
+	Global.casting_spell = true
+	textbox_text.hide()
+	spell_options.show()
+	if Global.has_no_spells == true:
+		_no_spells()
+		
+func _no_spells():
+	Global.has_no_spells = true
+	spell_options.hide()
+	textbox_text.show()
+	_show_flavor_text("%s has NO SPELLS." %[Global.current_turn.stats_resource.char_name])
+```
+
+```sh
+func attack_random_player_battler(damage: int) -> void:
+	var rand = randi_range(0, player_battlers.size() - 1)
+	
+	player_battlers[rand].play_hit_anim()
+	await get_tree().create_timer(0.6).timeout
+	player_battlers[rand].take_damage(damage)
+	player_battlers[rand].dmg_label._update_text(damage)
+	await get_tree().create_timer(0.1).timeout
+	_next_turn()
+
+func _defending_turn():
+	_defending(Global.current_turn)
+
+func _defending(current_player: Node2D) -> void:
+	current_player.stats_resource.defending = true
+	_show_flavor_text("%s defends themselves!" %[current_player.stats_resource.char_name])
+	_next_turn()
+	
+func _no_longer_defending():
+	Global.current_turn.stats_resource.defending = false
+	
+	
+```
+
+```sh
+#On death!!
+func _on_enemy_dead(dead_enemy: Node2D) -> void:
+	Global.total_enemy_exp += dead_enemy.stats_resource.experience
+	enemy_battlers.erase(dead_enemy)
+	all_battlers.erase(dead_enemy)
+	remove_child(dead_enemy)
+	_show_flavor_text("KNOCK OUT!!")
+	
+func _on_player_dead(dead_battler: Node2D) -> void:
+	player_battlers.erase(dead_battler)
+	all_battlers.erase(dead_battler)
+	_show_flavor_text("KNOCK OUT!!")
+	
+func _check_battle_end() -> bool:
+	if enemy_battlers.is_empty():
+		canvas_layer.hide()
+		Global.emit_signal("wave_complete")
+		
+		return true
+
+	if player_battlers.is_empty():
+		canvas_layer.hide()
+		Global.emit_signal("game_over")
+		
+		return true	
+	return false
+```
+
 ## End Panel
 
 
