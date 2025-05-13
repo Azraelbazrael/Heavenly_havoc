@@ -76,8 +76,38 @@ func _initalize() -> void:
 		
 	Global.current_turn = all_battlers[current_turn_index] ## sorts all battlers on the field via turn orders
 	_update_turn()
-```
 
+# Sorts character speed
+func _sort_turn_order_ascending(battler_1, battler_2) -> bool:
+	if battler_1.stats_resource.turn_speed < battler_2.stats_resource.turn_speed:
+		return true
+	return false
+```
+```sh
+# calls the different turns
+func _update_turn() -> void:
+	Global.casting_spell = false
+	#print(Global.current_turn.stats_resource.char_name)
+	if Global.current_turn.stats_resource.type == BattlerStats.BattlerType.Player:
+		player_status_text._show_hp_text(Global.current_turn.stats_resource.char_name, Global.current_turn.level, Global.current_turn.current_hp, Global.current_turn.stats_resource.max_hp, Global.current_turn.current_mp, Global.current_turn.stats_resource.max_mp)
+		_show_flavor_text("What does %s do...?" %[Global.current_turn.stats_resource.char_name])
+		turn_action_buttons.show()
+		_no_longer_defending()
+	else:
+		pass
+		
+	Global.current_turn.start_turn()
+		
+func _next_turn() -> void:
+	Global.current_turn.stop_turn()
+	if _check_battle_end() == false:
+		current_turn_index = (current_turn_index + 1) % all_battlers.size()
+		Global.current_turn = all_battlers[current_turn_index]
+		
+		_update_turn()
+	else:
+		pass
+```
 ## End Panel
 
 
