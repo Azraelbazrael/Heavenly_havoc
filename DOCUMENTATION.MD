@@ -177,7 +177,9 @@ func attack_selected_enemy(selected_enemy: Node2D) -> void:
 		selected_enemy.dmg_label._update_text(Global.current_turn._get_attack_damage())
 		_show_flavor_text("%s dealt %s damage!" %[Global.current_turn.stats_resource.char_name, Global.current_turn._get_attack_damage()])
 
-
+```
+These functions occur when the player selects the spell button. Right inside the textbox is a hidden grid container of buttons, containing the spell slots of the current battler, where the process for changing and adding spells occurs.
+```sh
 func _select_spell():
 	Global.casting_spell = true
 	textbox_text.hide()
@@ -186,11 +188,72 @@ func _select_spell():
 		_no_spells()
 		
 func _no_spells():
-	Global.has_no_spells = true
+	Global.casting_spell = false
 	spell_options.hide()
 	textbox_text.show()
 	_show_flavor_text("%s has NO SPELLS." %[Global.current_turn.stats_resource.char_name])
 ```
+```sh
+extends GridContainer
+class_name Spell_Options
+
+@onready var spell_buttons = get_children()
+#
+var char_stats: BattlerStats
+var move_slots
+
+
+
+func _ready() -> void:
+	Global.connect("spell_options", _get_char_stats)
+	
+func _get_char_stats():
+	char_stats = Global.current_turn.stats_resource 
+	move_slots = char_stats.spell_slots.attack_slots
+	
+	
+	_get_moves()
+	
+
+
+
+	
+func _get_moves() -> void:
+	
+	if move_slots.size() == 0:
+		Global.has_no_spells = true
+	else:
+		Global.has_no_spells = false
+		spell_buttons.resize(move_slots.size())
+		for sb in range(spell_buttons.size()):
+			
+			spell_buttons[sb].spell = (move_slots[sb])
+			spell_buttons[sb].text = (move_slots[sb].spell_name)
+```
+Each button within the container has the following script attached. This tracks the SpellData contained in each node, if at all. When pressed, it emits the "choose target" signal, for showing the target buttons.
+```sh
+extends Button
+class_name Spell_button
+
+@export var spell: SpellData
+
+func _ready() -> void:
+	pass
+	
+func _cast_spell():
+	if spell:
+		Global.casted.emit(spell)
+		spell.cast(Global.current_turn)
+		Global.emit_signal("choose_target")
+	
+
+
+func _on_pressed() -> void:	
+	_cast_spell()
+			
+```
+<br>
+
 
 ```sh
 func _defending_turn():
