@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqm78qalsy0r"]
+
+[ext_resource type="FontFile" uid="uid://cckje28m0o0w7" path="res://Assets/rainyhearts/rainyhearts.ttf" id="1_6a774"]
+
+[node name="Label" type="Label"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("1_6a774")
+theme_override_font_sizes/font_size = 9
+text = "fhghfgh"

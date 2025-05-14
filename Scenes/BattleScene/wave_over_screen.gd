@@ -3,9 +3,11 @@ extends Panel
 
 var flavor_text: RichTextLabel
 var _button: Button
+var exp_label = preload("res://Scenes/BattleScene/exp_text.tscn")
+
 
 @onready var win_lose_text = $"Win_lose text"
-@onready var exp_text = $exp_text
+@onready var exp_text_handler = $exp_text
 @onready var cont_button = $continue_button
 
 func _ready() -> void:
@@ -25,23 +27,33 @@ func change_button_text(message:String):
 	
 func on_win():
 	self.show()
-	change_win_text("BATTLE COMPLETE")
+	change_win_text("[center]BATTLE COMPLETE[/center]")
 	change_button_text("CONTINUE?")
 	update_exp()
 	
 func on_lose():
 	self.show()
 	#win_lose_text = flavor_text
-	change_win_text("BATTLE LOST")
+	change_win_text("[center]BATTLE LOST[/center]")
 	change_button_text("RETRY")
 
 	
 func update_exp():
 	var pb = get_tree().get_nodes_in_group("PlayerBattler")
-	exp_text.clear()
+	
+
+
+	if exp_text_handler.get_child_count() != 0:
+		for etc in exp_text_handler.get_children():
+			exp_text_handler.remove_child(etc)
+			etc.queue_free()
+	
 	for i in pb.size():
+		var exp_text = exp_label.instantiate()
 		pb[i].gain_exp(Global.total_enemy_exp)
-		exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+		exp_text_handler.add_child(exp_text)
+		exp_text.text = ("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+	# append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
 	return
 	
 	
