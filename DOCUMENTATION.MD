@@ -451,7 +451,7 @@ func update_exp():
 	return
 	
 ```
-`cont_pressed` is what occurs when the continue button is pressed. The whole scene's visibility is toggled off and emits the `Global.init_battle` signal, triggering a new battle to begin.
+`cont_pressed` is what occurs when the continue button is pressed. The whole scene's visibility is toggled off and emits the `Global.init_battle` signal, continuing the loop of creating a battle and finishing one.
 ```sh
 ##showing visibility
 func cont_pressed():
