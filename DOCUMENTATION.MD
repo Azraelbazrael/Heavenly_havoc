@@ -440,7 +440,6 @@ func update_exp():
 		pb[i].gain_exp(Global.total_enemy_exp)
 		exp_text_handler.add_child(exp_text)
 		exp_text.text = ("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
-	# append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
 	return
 	
 ```
