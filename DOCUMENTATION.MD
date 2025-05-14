@@ -636,7 +636,13 @@ func _cast_spell():
 ```
 
 <br>
+<br>
 
+Levelling consists of:
+-get_level_exp(levl: int): calculating how much experience until the battler reaches the next level
+-gain_exp(amount:int): A function that gets referenced in the wave panel and only gets calculated when a wave is over
+
+Levelling up is largely unfinished during this stage of progress.
 ```sh
 func get_level_exp(levl: int):
 	return round(pow(levl, 1.8) + levl *4)
