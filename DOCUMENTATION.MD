@@ -464,7 +464,44 @@ func cont_pressed():
 
 # Stats, Resources and Battlers
 
-## Battlers
+## Battler Stats Resource
+```sh
+class_name BattlerStats
+extends Resource
+
+
+enum BattlerType{
+	Enemy, Player
+}
+
+@export_category("Battler Info")
+@export var type: BattlerType
+@export var char_name: String
+@export var max_hp : int
+
+@export var turn_speed : int 
+
+@export_category("Battler Stats")
+@export var attack : int
+@export var defense : int
+@export var magic: int
+@export var unity: int
+@export var intelligence: int
+@export var style: int
+
+@export_category("Player Stats")
+@export var max_mp: int
+@export var defending: bool
+@export var base_lvl: int
+@export var experience: int
+#
+@export var spell_slots: Movepool
+
+func cast():
+	pass
+```
+
+## Battler Scripts
 "Battlers" in this case is defined by any character on the battle field, player or not.
 Each Battler is sorted into different global node groups: 
 - "PlayerBattler"
@@ -472,9 +509,11 @@ Each Battler is sorted into different global node groups:
 
 <br>
 These battlers share a lot in common functionality-wise, thus they'll be covered in one section. Each battler has a single script reused for each of their type, each has an exported BattlerStats resource to be interchanged with each other, a progress bar, a focus cursor and an animation player. I'll go more in depth on what they have in common before diverging into how they differ.
-
 <br>
 
+Taken from `enemy_battler.gd`
+<br>
+Once ready is called, the stats_resource's max_hp is assigned to the scripts `current_hp`, to be referenced later. Along with that, the turn is paused. The select cursor is no longer present, and the animation is set to the default. The progress bar is a visual representation of the HP, assigning the current_hp as the current value, and the max_hp as it's maximum value.
 
 ```sh
 func _ready():
@@ -491,6 +530,13 @@ func _update_progress_bar() -> void:
 func stop_turn() -> void:
 	unfocus()
 	animation_player.play("RESET")
+
+func start_turn() -> void:
+	focus()	
+	await get_tree().create_timer(0.3).timeout
+	play_attack_anim()
+	await get_tree().create_timer(0.6).timeout
+	deal_damage.emit(_get_attack_damage())
 	
 func focus():
 	_focus.show()
@@ -499,8 +545,179 @@ func unfocus():
 	_focus.hide()
 
 ```
+Basic attacks work as follows. The damage label attached to the scene is shown and hidden, the amount the battler takes is passed on as an interger when the function is called. From there, the amount taken from damage is lessened by the stats_resource's `defense` stat. When a battler's current_hp stat is 0, it'll emit a `dead` local signal, which is listened for in the `Battle_Manager`.
 
+```sh
+func play_attack_anim():
+	animation_player.play("Attack")
+	
+func play_hit_anim():
+	animation_player.play("Hurt")
 
+func _get_attack_damage() -> int:
+	return round(stats_resource.attack * 1.5)
+	
+
+func take_damage(amount: int)-> void:
+	dmg_label.show()
+	await get_tree().create_timer(0.6).timeout	
+	dmg_label.hide()
+	
+	current_hp -= (amount - stats_resource.defense)
+	
+	print(current_hp)
+	if current_hp <=0:
+		current_hp = 0
+		dead.emit(self)
+	_update_progress_bar()
+
+```
+The main difference between Enemy and Player Battlers is three key things:
+- defending
+- magic
+- experience
+
+<br>
+All the above listed, the enemy lacks. Magic in this project relies on a stamina system. Along with HP the Player Battlers need to manage their mana in order to effectively clear a level. The `Global.casted` signal is emitted when any of the spell buttons with `SpellData` attached is pressed.
+```sh
+func _ready():
+	
+	Global.casted.connect(_cast_spell)
+	stop_turn()
+	current_hp = stats_resource.max_hp
+	current_mp = stats_resource.max_mp
+	
+	_update_progress_bar()
+
+func _update_progress_bar() -> void:
+	hp_bar.max_value = stats_resource.max_hp
+	hp_bar.value = current_hp
+	mana_bar.max_value = stats_resource.max_mp
+	mana_bar.value = current_mp
+```
+<br>
+
+Casting a spell works very similarly to attacks, except the Spelldata for a magical attack is passed across scripts instead of referencing the stats_resource directly.
+What the `Global.casted(SpellData)` does is store data that's attached to the node and emits that object for `Player_Battler`'s `_cast_spell` to reference and use. The callable used here pulls a random interger from two different numbers and has that be an attack roll, as opposed to having a set amount of damage for a basic attack.
+```sh
+func start_blasting(enemy_target: Node2D) -> void:
+	
+	await get_tree().create_timer(0.3).timeout
+	play_attack_anim()
+	await get_tree().create_timer(0.6).timeout
+	enemy_target.play_hit_anim()
+	await get_tree().create_timer(0.6).timeout
+	enemy_target.take_damage(sp_damage)
+	await get_tree().create_timer(0.6).timeout
+	turn_ended.emit()
+	
+func _cast_spell(spell: SpellData) -> int:
+	sp_damage =	spell.spell_behaviour.get_spell_perform()
+	return sp_damage
+```
+<br>
+
+Found in `spell_buttons.gd`
+```sh
+extends Button
+class_name Spell_button
+
+@export var spell: SpellData
+
+func _ready() -> void:
+	pass
+	
+func _cast_spell():
+	if spell:
+		Global.casted.emit(spell)
+		spell.cast(Global.current_turn)
+		Global.emit_signal("choose_target")
+	
+```
+
+<br>
+
+```sh
+func get_level_exp(levl: int):
+	return round(pow(levl, 1.8) + levl *4)
+	
+
+func gain_exp(amount: int):
+	current_exp += amount
+	while current_exp >= exp_required:
+		stats_resource.experience -= exp_required
+		level_up()
+
+func level_up():
+	level += 1
+	exp_required = get_level_exp(level + 1)
+	# figure out how to scale enemies to your level somehow
+
+#func level_up_moves(lvl: int, spellname):
+	#pass
+```
 ## Spells
 
+The component of each spell can be broken down in two pieces:
+- SpellData
+- SpellBehaviour
 
+<br>
+`SpellData` carries the behaviour and spell name, basically. It's a container for something more complicated for ease of access.
+```sh
+extends Resource
+class_name SpellData
+
+
+enum Targets{Self, Party, 
+Enemy, All_Enemies}
+
+@export var targets: int = Targets.Enemy
+@export var spell_name: String
+@export var spell_behaviour: SpellBehaviour
+
+func cast(caster: Node2D):
+	spell_behaviour.cast(caster)
+```
+
+<br>
+
+`SpellBehaviour` contains:
+- `get_spell_preform()`: A function to preform an attack roll, randomly pulling an interger between a range between the minimum and maximum damage. 
+- `cast(battler: Node2D)`: A function to have the spell affect the user's mana by referencing the established mana_cost and taking that amount from the battler's mana.
+- `cast_all(battlers: Array[Node2D])`: A currently unused casting type to use on multiple nodes. 
+```sh
+extends Resource
+class_name SpellBehaviour
+
+enum SpellType{
+	Healing, Damaging
+}
+
+
+
+@export var type: SpellType
+@export var spell_name: String
+@export var min_roll: int
+@export var max_roll: int
+
+@export var mana_cost: int
+
+func get_spell_perform() -> int:
+	randomize()
+	 
+	return randi_range(min_roll, max_roll)
+
+func cast(battler: Node2D):
+	if mana_cost <= battler.current_mp:
+		battler.current_mp -= mana_cost
+		
+
+func cast_all(battlers: Array[Node2D]):
+	for b in battlers:
+		match SpellType:
+			SpellType.Healing:
+				b.current_hp += get_spell_perform()
+			SpellType.Damaging:
+				b.current_hp -= get_spell_perform()
+``
