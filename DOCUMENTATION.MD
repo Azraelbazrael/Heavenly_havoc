@@ -360,7 +360,7 @@ func _check_battle_end() -> bool:
 <br>
 
 The battling scene also contains a script for changing the UI found in the corner. This is for player convenience. Once each battle is initialized, `Global.current_wave` counts up by one. 
-(put an image here)
+<img src="Assets/screenshots/wave_text_screenshot.png">
 
 ```sh
 extends Label
@@ -382,7 +382,9 @@ The root node of this scene is hidden by default and layered over top of the bat
 <br>
 
 The following lines of code just establishes a few things. Firstly is the top of the flavor text, then the button beneath. 
-(image here)
+<img src="Assets/screenshots/battle_end_screenshot.png">
+
+
 ```sh
 extends Panel
 
