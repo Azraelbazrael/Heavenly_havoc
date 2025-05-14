@@ -379,67 +379,7 @@ The root node of this scene is hidden by default and layered over top of the bat
 
 The following lines of code just establishes a few things. Firstly is the top of the flavor text, then the button beneath. 
 (image here)
-```sh
-extends Panel
 
-
-var flavor_text: RichTextLabel
-var _button: Button
-
-@onready var win_lose_text = $"Win_lose text"
-@onready var exp_text = $exp_text
-@onready var cont_button = $continue_button
-
-func _ready() -> void:
-	Global.connect("wave_complete", on_win)
-	Global.connect("game_over", on_lose)
-	cont_button.pressed.connect(cont_pressed)
-```
-This group of code changes the text and text buttons respectively. By listening for the global signals, the text changes based off of what signal is recieved.
-```sh
-##changing text	
-func change_win_text(message: String):
-	win_lose_text.clear()
-	win_lose_text.append_text(message)
-	
-	
-func change_button_text(message:String):
-	_button = cont_button
-	_button.text = (message)
-	
-func on_win():
-	self.show()
-	change_win_text("BATTLE COMPLETE")
-	change_button_text("CONTINUE?")
-	update_exp()
-	
-func on_lose():
-	self.show()
-	#win_lose_text = flavor_text
-	change_win_text("BATTLE LOST")
-	change_button_text("RETRY")
-
-```
-These next two are to ensure the "game" part of the game runs smoother. 
-<br>
-When `update_exp` is called, "experience" found in the player battlers stat_resource is updated for each player battler, displaying how much they gained from battle and how many more they need for level up. 
-<br>
-`cont_pressed` Is what happens when the bottom button is pressed, this hides the panel and passed along a signal to make sure the next battle initalizes.
-```sh
-func update_exp():
-	var pb = get_tree().get_nodes_in_group("PlayerBattler")
-	exp_text.clear()
-	for i in pb.size():
-		pb[i].gain_exp(Global.total_enemy_exp)
-		exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
-	return
-	
-	
-##showing visibility
-func cont_pressed():
-	self.hide()
-	Global.emit_signal("init_battle")
-```
 # Stats, Actions and Resources
 ## Battlers
 ## Spells
