@@ -383,7 +383,7 @@ The end panel is what appears when the all battlers of the player or enemy side 
 The root node of this scene is hidden by default and layered over top of the battling scene. 
 <br>
 
-The following lines of code just establishes a few things. Firstly is the top of the flavor text, then the button beneath. 
+The following lines of code just establishes a few things. Firstly is the top of the winning text, the exp display, the button and lastly stores a packedscene for labels used for the exp text.
 <br>
 <img src="Assets/screenshots/battle_end_screenshot.png">
 
@@ -406,6 +406,7 @@ func _ready() -> void:
 	Global.connect("game_over", on_lose)
 	cont_button.pressed.connect(cont_pressed)
 ```
+When either signal is emitted, the RichLabelText at the top is cleared, making way for whichever new string matches the condition. `Change_win_text` holds the string to be displayed across, appending the new message onto the node.
 ```sh
 ##changing text	
 func change_win_text(message: String):
@@ -429,7 +430,11 @@ func on_lose():
 	change_win_text("[center]BATTLE LOST[/center]")
 	change_button_text("RETRY")
 
-	
+```
+<br>
+
+`update_exp` starts by first storing how many player battlers are left on the field, this is stored in an array. Once that's taken care of, the function checks the childcount of a grid container in the scene, when a game is first loaded there is none but that changes with the next loop. The for loop found here counts each battler and instantiates the packed scene from earlier, this makes sure the settings between the formatting is all the same and resizes and scales based off of how many battlers are present on the field. 
+```sh
 func update_exp():
 	var pb = get_tree().get_nodes_in_group("PlayerBattler")
 	
@@ -448,6 +453,7 @@ func update_exp():
 	return
 	
 ```
+`cont_pressed` is what occurs when the continue button is pressed. The whole scene's visibility is toggled off and emits the `Global.init_battle` signal, triggering a new battle to begin.
 ```sh
 ##showing visibility
 func cont_pressed():
