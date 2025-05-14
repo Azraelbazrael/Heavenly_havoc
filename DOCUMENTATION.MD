@@ -74,6 +74,8 @@ Managing a battle in this case comes down to a few processes in this order:
 - changing turns
 - keeping track of whose dead
 
+<img src="Assets/screenshots/battle_scene_screenshot.png">
+
 <br>
 Once the scene is loaded, the script looks for nodes in a group to add to an array, then references and connects those node's signals to scripts mentioned later in the script. Once the ready function is complete, it passes the engine to read the initalize function.
 
