@@ -110,6 +110,7 @@ func take_damage(amount: int)-> void:
 		dead.emit(self)
 		queue_free()
 	_update_progress_bar()
+	
 ## Level experience	
 
 func get_level_exp(levl: int):
