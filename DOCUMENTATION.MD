@@ -253,7 +253,9 @@ func _on_pressed() -> void:
 			
 ```
 <br>
+<br>
 
+This function is what happens what the player chooses to defend this round. It switches on a bool and updates the flavor text before calling the next turn.
 
 ```sh
 func _defending_turn():
@@ -271,6 +273,8 @@ func _no_longer_defending():
 ```
 
 <br>
+<br>
+This sole function is used during enemy turns. Enemy AI is very simple and barebones during this stage of production. What this does is look for a random player battler stored in the array and cause damage to that specific Node, before updating to the next turn in the queue.
 
 ```sh
 func attack_random_player_battler(damage: int) -> void:
@@ -287,7 +291,9 @@ func attack_random_player_battler(damage: int) -> void:
 
 <br>
 
-
+When a battler on either side dies, one of these top two functions are called. They serve nearly identical functions, when a signal from either player or enemy battlers is emitted, the function is called, passing the node that emitted the signal into the brackets. 
+The array erases the shared value from the enemy/player and all battler arrays respectively, before removing the child from the scene entirely.
+EXP is passed when an enemy dies, but does not when a player does. 
 ```sh
 #On death!!
 func _on_enemy_dead(dead_enemy: Node2D) -> void:
@@ -301,7 +307,9 @@ func _on_player_dead(dead_battler: Node2D) -> void:
 	player_battlers.erase(dead_battler)
 	all_battlers.erase(dead_battler)
 	_show_flavor_text("KNOCK OUT!!")
-	
+```
+Lastly, this function is called during every turn. What this does is check if either the enemy or player battler arrays are empty, if so, emit a global signal. These signals will be important to the end_panel and serves as different ending flags.
+```sh
 func _check_battle_end() -> bool:
 	if enemy_battlers.is_empty():
 		canvas_layer.hide()
