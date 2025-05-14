@@ -362,8 +362,6 @@ func _check_battle_end() -> bool:
 The battling scene also contains a script for changing the UI found in the corner. This is for player convenience. Once each battle is initialized, `Global.current_wave` counts up by one. 
 <br>
 
-<img src="Assets/screenshots/wave_text_screenshot.png">
-
 ```sh
 extends Label
 class_name Wave_text
