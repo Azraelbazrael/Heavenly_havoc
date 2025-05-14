@@ -688,6 +688,8 @@ func cast(caster: Node2D):
 - `get_spell_preform()`: A function to preform an attack roll, randomly pulling an interger between a range between the minimum and maximum damage. 
 - `cast(battler: Node2D)`: A function to have the spell affect the user's mana by referencing the established mana_cost and taking that amount from the battler's mana.
 - `cast_all(battlers: Array[Node2D])`: A currently unused casting type to use on multiple nodes. 
+
+
 ```sh
 extends Resource
 class_name SpellBehaviour
