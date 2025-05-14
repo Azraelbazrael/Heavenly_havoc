@@ -10,14 +10,13 @@ The bulk of these are defined in an auto-loade global script found in `global.gd
 
 ```sh
 extends Node
-signal init_battle // initiates battles
-signal spell_options //shows spells player has
-signal be_selected(this_target: Node2D) // signals that the target has been chosen for attacks
-signal choose_target // gives player option to choose targets
-signal wave_complete // when a battle is completed
-signal game_over // when all players died 
-signal casted(SpellData) // holds the spell selected to be referenced later
-
+signal init_battle ## initiates battles
+signal spell_options ##shows spells player has
+signal be_selected(this_target: Node2D) ## signals that the target has been chosen for attacks
+signal choose_target ## gives player option to choose targets
+signal wave_complete ## when a battle is completed
+signal game_over ## when all players died 
+signal casted(SpellData) ## holds the spell selected to be referenced later
 
 
 var current_turn: Node2D
@@ -30,7 +29,40 @@ var total_enemy_exp: int = 0
 ```
 
 # Main Scene
-This section discusses the sections of code found within the main scene. This includes the battling scene, the ending panel and the other scripts these scenes heavily reference.
+This section discusses the sections of code found within the main scene found in `gameroot.tscn`. This includes the battling scene, the ending panel and the other scripts these scenes heavily reference. 
+The sole root node of the scene contains a simple script:
+<br>
+All this does, apart from instantiating the two important scenes is to "reset" the battle waves, and erase the battle scene in order for the player to start over. 
+```sh
+extends Node2D
+
+const battle_scene = preload("res://Scenes/BattleScene/Battle_Scene.tscn")
+const battle_over_screen = preload("res://Scenes/BattleScene/wave_over_screen.tscn")
+
+@onready var canvas = $CanvasLayer
+var battle
+var battle_over
+
+func _ready():
+	_start_battle()
+	Global.connect("game_over", _restart)
+	
+func _start_battle():
+	battle = battle_scene.instantiate()
+	battle_over = battle_over_screen.instantiate()
+	
+	add_child(battle)
+	add_child(battle_over)
+	
+	
+func _restart():
+	battle.queue_free()
+	Global.current_wave = 0
+
+```
+
+<br>
+
 ## Battle Manager
 
 Managing a battle in this case comes down to a few processes in this order:
@@ -308,7 +340,7 @@ func _on_player_dead(dead_battler: Node2D) -> void:
 	all_battlers.erase(dead_battler)
 	_show_flavor_text("KNOCK OUT!!")
 ```
-Lastly, this function is called during every turn. What this does is check if either the enemy or player battler arrays are empty, if so, emit a global signal. These signals will be important to the end_panel and serves as different ending flags.
+The `check_battle_end` function is called during every turn. What this does is check if either the enemy or player battler arrays are empty, if so, emit a global signal. These signals will be important to the end_panel and serves as different ending flags.
 ```sh
 func _check_battle_end() -> bool:
 	if enemy_battlers.is_empty():
@@ -325,9 +357,89 @@ func _check_battle_end() -> bool:
 	return false
 ```
 
+<br>
+The battling scene also contains a script for changing the UI found in the corner. This is for player convenience. Once each battle is initialized, `global.Current_wave` counts up by one. 
+(put an image here)
+```sh
+extends Label
+class_name Wave_text
+
+func _ready() -> void:
+	Global.connect("init_battle", update_text)
+
+func update_text():
+	Global.current_wave += 1
+	text = "wave %s" % [Global.current_wave]
+
+```
 ## End Panel
+The end panel is what appears when the all battlers of the player or enemy side are no longer present. This check occurs within the `battler_manager`.
+The root node of this scene is hidden by default and layered over top of the battling scene. 
+<br>
+
+The following lines of code just establishes a few things. Firstly is the top of the flavor text, then the button beneath. 
+(image here)
+```sh
+extends Panel
 
 
+var flavor_text: RichTextLabel
+var _button: Button
+
+@onready var win_lose_text = $"Win_lose text"
+@onready var exp_text = $exp_text
+@onready var cont_button = $continue_button
+
+func _ready() -> void:
+	Global.connect("wave_complete", on_win)
+	Global.connect("game_over", on_lose)
+	cont_button.pressed.connect(cont_pressed)
+```
+This group of code changes the text and text buttons respectively. By listening for the global signals, the text changes based off of what signal is recieved.
+```sh
+##changing text	
+func change_win_text(message: String):
+	win_lose_text.clear()
+	win_lose_text.append_text(message)
+	
+	
+func change_button_text(message:String):
+	_button = cont_button
+	_button.text = (message)
+	
+func on_win():
+	self.show()
+	change_win_text("BATTLE COMPLETE")
+	change_button_text("CONTINUE?")
+	update_exp()
+	
+func on_lose():
+	self.show()
+	#win_lose_text = flavor_text
+	change_win_text("BATTLE LOST")
+	change_button_text("RETRY")
+
+```
+These next two are to ensure the "game" part of the game runs smoother. 
+<br>
+When `update_exp` is called, "experience" found in the player battlers stat_resource is updated for each player battler, displaying how much they gained from battle and how many more they need for level up. 
+<br>
+`cont_pressed` Is what happens when the bottom button is pressed, this hides the panel and passed along a signal to make sure the next battle initalizes.
+```sh
+func update_exp():
+	var pb = get_tree().get_nodes_in_group("PlayerBattler")
+	exp_text.clear()
+	for i in pb.size():
+		pb[i].gain_exp(Global.total_enemy_exp)
+		exp_text.append_text("%s lv. %s, current exp: %s, exp req: %s" %[pb[i].stats_resource.char_name, pb[i].level, pb[i].current_exp, pb[i].exp_required])
+	return
+	
+	
+##showing visibility
+func cont_pressed():
+	self.hide()
+	Global.emit_signal("init_battle")
+```
 # Stats, Actions and Resources
 ## Battlers
 ## Spells
