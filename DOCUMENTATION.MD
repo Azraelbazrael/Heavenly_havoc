@@ -469,6 +469,7 @@ func cont_pressed():
 Each Battler is sorted into different global node groups: 
 - "PlayerBattler"
 - "EnemyBattler"
+<br>
 These battlers share a lot in common functionality-wise, thus they'll be covered in one section. Each battler has a single script reused for each of their type, each has an exported BattlerStats resource to be interchanged with each other, a progress bar, a focus cursor and an animation player. I'll go more in depth on what they have in common before diverging into how they differ.
 
 ```sh
